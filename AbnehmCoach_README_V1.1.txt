@@ -1,5 +1,3 @@
-# Abnehmcoach
-
 ABNEHMCOACH PETER V1.1
 
 Startdatum
