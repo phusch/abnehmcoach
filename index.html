@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AbnehmCoach Peter V1.1.1</title>
+<title>AbnehmCoach Peter V1.1.2</title>
 <style>
 :root{
   --bg:#f5f7fb; --card:#ffffff; --ink:#1f2d3d; --muted:#657386;
@@ -94,8 +94,20 @@ input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 
 .badge.warn{background:var(--softorange);color:#a65b10}
 .badge.bad{background:var(--softred);color:var(--red)}
 .chart-wrap{width:100%;height:290px;position:relative}
-canvas{display:block;width:100%;height:290px;border-radius:14px;background:#fff;border:1px solid var(--line)}
+/* V1.1.2: Charts als HTML/SVG statt Canvas, damit Safari/Druck/Browser zuverlässiger anzeigen */
+.html-chart{width:100%;min-height:290px;border-radius:14px;background:#fff;border:1px solid var(--line);padding:14px;overflow:hidden}
+.bar-chart{display:flex;gap:8px;align-items:flex-end;height:215px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 8px 0 8px}
+.bar-col{flex:1;min-width:22px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:5px}
+.bar-value{font-size:11px;color:var(--blue);font-weight:800;min-height:14px;text-align:center}
+.bar{width:72%;min-width:12px;border-radius:8px 8px 0 0;background:linear-gradient(180deg,var(--teal),#1f766b);min-height:0;transition:height .25s ease}
+.bar.over{background:linear-gradient(180deg,var(--orange),#c76f20)}
+.bar-label{font-size:10px;color:var(--muted);white-space:nowrap;transform:rotate(-35deg);transform-origin:center top;margin-top:2px}
+.weight-svg{width:100%;height:230px;display:block;background:#fff;border-left:1px solid var(--line);border-bottom:1px solid var(--line)}
+.chart-empty{height:230px;display:flex;align-items:center;justify-content:center;text-align:center;color:var(--muted);font-size:14px;background:#fff;border:1px dashed var(--line);border-radius:12px;padding:18px}
 .chart-note{font-size:12px;color:var(--muted);margin-top:8px}
+.data-status{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin-top:10px}
+@media(max-width:760px){.data-status{grid-template-columns:repeat(2,minmax(0,1fr))}.bar-chart{gap:5px}.bar-label{font-size:9px}}
+@media(max-width:520px){.data-status{grid-template-columns:1fr}.bar-value{font-size:10px}}
 .plan-table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border-radius:14px;border:1px solid var(--line);font-size:13px}
 .plan-table th{background:var(--blue);color:#fff;text-align:left;padding:10px}
 .plan-table td{padding:10px;border-top:1px solid var(--line);vertical-align:top}
@@ -147,8 +159,8 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 <header>
   <div class="header-inner">
     <div>
-      <h1>🥗 AbnehmCoach Peter <span style="font-size:14px;opacity:.8">V1.1.1</span></h1>
-      <div class="subtitle">Planstart: Freitag, 12.06.2026 · Schnellimport oben · Charts korrigiert</div>
+      <h1>🥗 AbnehmCoach Peter <span style="font-size:14px;opacity:.8">V1.1.2</span></h1>
+      <div class="subtitle">Planstart: Freitag, 12.06.2026 · Schnellimport oben · Charts ohne Canvas korrigiert</div>
       <div class="navchips">
         <a href="#schnellimport">Schnellimport</a><a href="#eintrag">Details</a><a href="#charts">Diagramme</a><a href="#wochencheck">Wochencheck</a><a href="#wochenplan">Plan</a>
       </div>
@@ -251,19 +263,34 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
     </div>
   </section>
 
+  <section class="card" style="margin-top:16px">
+    <b style="color:var(--blue)">🔎 Datenspeicher-Prüfung</b>
+    <div class="small">Zeigt an, ob Mahlzeiten wirklich lokal gespeichert sind - unabhängig vom ausgewählten Datum.</div>
+    <div class="data-status">
+      <div class="mini">Mahlzeiten gesamt <b id="dbgMeals">0</b></div>
+      <div class="mini">Kalorien gesamt <b id="dbgKcal">0 kcal</b></div>
+      <div class="mini">Eiweiß gesamt <b id="dbgProtein">0 g</b></div>
+      <div class="mini">Tage mit Essen <b id="dbgDays">0</b></div>
+    </div>
+    <div class="footer-actions" style="margin-top:10px">
+      <button class="secondary" onclick="render()">Anzeige jetzt aktualisieren</button>
+      <button class="secondary" onclick="jumpToStoredDate()">Ersten gespeicherten Essenstag anzeigen</button>
+    </div>
+  </section>
+
   <div class="section-title" id="charts">
     <h2>📊 Verlauf & Visualisierung</h2>
-    <span class="small">V1.1.1: Charts werden nach jedem Speichern neu gezeichnet.</span>
+    <span class="small">V1.1.2: Visualisierung ohne Canvas - gespeicherte Daten werden zuverlässig als Balken angezeigt.</span>
   </div>
   <section class="two-col">
     <div class="card">
-      <h3 style="margin-top:0;color:var(--blue)">Kalorien der letzten 14 Tage</h3>
-      <div class="chart-wrap"><canvas id="kcalChart"></canvas></div>
+      <h3 style="margin-top:0;color:var(--blue)">Kalorien pro gespeichertem Tag</h3>
+      <div class="html-chart" id="kcalChart"></div>
       <div class="chart-note" id="kcalChartNote">Noch keine Kalorien eingetragen.</div>
     </div>
     <div class="card">
       <h3 style="margin-top:0;color:var(--blue)">Gewicht & Bauchumfang</h3>
-      <div class="chart-wrap"><canvas id="weightChart"></canvas></div>
+      <div class="html-chart" id="weightChart"></div>
       <div class="chart-note" id="weightChartNote">Für die Gewichtslinie brauchst du mindestens zwei Werte.</div>
     </div>
   </section>
@@ -394,7 +421,7 @@ let state = load();
 
 function defaultState(){
   return {
-    version:"1.1.1",
+    version:"1.1.2",
     goals:{kcal:1700, protein:110, move:30},
     meals:[],
     logs:[{date:PLAN_START, weight:96, belly:null, move:0, moveType:"Planstart"}]
@@ -407,7 +434,7 @@ function migrateOldData(){
       if(raw){
         const old = JSON.parse(raw);
         if(old && (old.meals || old.logs)){
-          old.version = "1.1.1-migrated";
+          old.version = "1.1.2-migrated";
           localStorage.setItem(KEY, JSON.stringify(old));
           return old;
         }
@@ -443,7 +470,7 @@ function init(){
   document.getElementById("goalMove").value = state.goals.move || 30;
   document.getElementById("todayText").textContent = new Intl.DateTimeFormat("de-DE",{weekday:"long", day:"2-digit", month:"2-digit", year:"numeric"}).format(today);
   render();
-  window.addEventListener("resize", scheduleCharts);
+  window.addEventListener("resize", renderCharts);
 }
 function getMealsFor(date){return state.meals.filter(m => m.date === date);}
 function sum(arr, field){return arr.reduce((a,b)=>a+(Number(b[field])||0),0)}
@@ -469,12 +496,30 @@ function render(){
   renderWeightTrend();
   renderMeals(d);
   renderWeekSummary();
-  scheduleCharts();
+  renderDebugStatus();
+  renderCharts();
 }
-let chartTimer = null;
-function scheduleCharts(){
-  clearTimeout(chartTimer);
-  chartTimer = setTimeout(()=>requestAnimationFrame(()=>{ drawKcalChart(); drawWeightChart(); }), 50);
+function renderCharts(){
+  renderKcalChart();
+  renderWeightChart();
+}
+function renderDebugStatus(){
+  const meals = state.meals || [];
+  const days = [...new Set(meals.map(m=>m.date).filter(Boolean))];
+  document.getElementById("dbgMeals").textContent = meals.length;
+  document.getElementById("dbgKcal").textContent = Math.round(sum(meals,"kcal")) + " kcal";
+  document.getElementById("dbgProtein").textContent = Math.round(sum(meals,"protein")) + " g";
+  document.getElementById("dbgDays").textContent = days.length;
+}
+function jumpToStoredDate(){
+  const first = (state.meals || []).map(m=>m.date).filter(Boolean).sort()[0];
+  if(first){
+    document.getElementById("mealDate").value = first;
+    document.getElementById("logDate").value = first;
+    render();
+  } else {
+    alert("Es ist noch keine Mahlzeit gespeichert.");
+  }
 }
 function renderPlanStatus(){
   const diff = daysBetween(PLAN_START, isoToday);
@@ -652,89 +697,69 @@ function lastNDates(n){
   for(let i=n-1;i>=0;i--){let x=new Date(d);x.setDate(d.getDate()-i);arr.push(x.toISOString().slice(0,10));}
   return arr;
 }
-function setupCanvas(canvas){
-  const rect = canvas.getBoundingClientRect();
-  let cssW = Math.max(320, Math.floor(rect.width || canvas.parentElement.clientWidth || 600));
-  let cssH = Math.max(240, Math.floor(rect.height || 290));
-  const ratio = window.devicePixelRatio || 1;
-  canvas.width = Math.floor(cssW * ratio);
-  canvas.height = Math.floor(cssH * ratio);
-  const ctx = canvas.getContext("2d");
-  ctx.setTransform(ratio,0,0,ratio,0,0);
-  return {ctx,w:cssW,h:cssH};
+function chartDates(){
+  const mealDates = (state.meals || []).map(m=>m.date).filter(Boolean);
+  const logDates = (state.logs || []).map(l=>l.date).filter(Boolean);
+  let dates = [...new Set([...mealDates, ...logDates, selectedDate()])].sort();
+  if(dates.length === 0) dates = lastNDates(14);
+  if(dates.length > 14) dates = dates.slice(-14);
+  return dates;
 }
-function drawAxes(ctx,w,h,pad){
-  ctx.clearRect(0,0,w,h);
-  ctx.fillStyle="#ffffff"; ctx.fillRect(0,0,w,h);
-  ctx.strokeStyle="#dce3ec"; ctx.lineWidth=1;
-  ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad,h-pad); ctx.lineTo(w-pad,h-pad); ctx.stroke();
-}
-function drawKcalChart(){
-  const c=document.getElementById("kcalChart");
-  const o=setupCanvas(c), ctx=o.ctx, w=o.w, h=o.h, pad=42;
-  drawAxes(ctx,w,h,pad);
-  const dates=lastNDates(14);
-  const vals=dates.map(d=>sum(getMealsFor(d),"kcal"));
-  const total=vals.reduce((a,b)=>a+b,0);
-  const note=document.getElementById("kcalChartNote");
-  if(total<=0){
-    ctx.fillStyle="#657386"; ctx.font="15px system-ui"; ctx.fillText("Noch keine Kalorien eingetragen.", pad+12, h/2);
-    note.textContent="Noch keine Kalorien eingetragen.";
+function renderKcalChart(){
+  const el = document.getElementById("kcalChart");
+  const note = document.getElementById("kcalChartNote");
+  const dates = chartDates();
+  const data = dates.map(d=>({date:d, kcal:sum(getMealsFor(d),"kcal"), protein:sum(getMealsFor(d),"protein")}));
+  const total = data.reduce((a,b)=>a+b.kcal,0);
+  if(total <= 0){
+    el.innerHTML = `<div class="chart-empty">Noch keine Kalorien eingetragen.<br>Wenn unten eine Mahlzeit sichtbar ist, klicke bitte „Anzeige jetzt aktualisieren“.</div>`;
+    note.textContent = "Noch keine Kalorien eingetragen.";
     return;
   }
-  const max=Math.max(state.goals.kcal, ...vals, 1000)*1.15;
-  const gap=(w-2*pad)/dates.length;
-  const bw=Math.max(8,gap*0.62);
-  ctx.font="11px system-ui";
-  vals.forEach((v,i)=>{
-    const x=pad+i*gap+gap*.19;
-    let barH=(h-2*pad)*(v/max);
-    if(v>0 && barH<4) barH=4;
-    const y=h-pad-barH;
-    ctx.fillStyle=v>state.goals.kcal?"#f2994a":"#2b8f81";
-    ctx.fillRect(x,y,bw,barH);
-    if(i%2===0 || dates[i]===selectedDate()){
-      ctx.fillStyle="#657386";
-      ctx.fillText(dates[i].slice(5),x-3,h-pad+17);
-    }
-  });
-  const gy=h-pad-(h-2*pad)*(state.goals.kcal/max);
-  ctx.strokeStyle="#1f3a5f"; ctx.setLineDash([6,5]); ctx.beginPath(); ctx.moveTo(pad,gy); ctx.lineTo(w-pad,gy); ctx.stroke(); ctx.setLineDash([]);
-  ctx.fillStyle="#1f3a5f"; ctx.font="12px system-ui"; ctx.fillText("Ziel "+state.goals.kcal+" kcal", pad+8, Math.max(14,gy-8));
-  note.textContent=`Gespeichert: ${Math.round(sum(getMealsFor(selectedDate()),"kcal"))} kcal am ausgewählten Tag.`;
+  const max = Math.max(state.goals.kcal || 1700, ...data.map(d=>d.kcal), 1000);
+  el.innerHTML = `<div class="bar-chart">` + data.map(d=>{
+    const pct = d.kcal > 0 ? Math.max(4, Math.round((d.kcal/max)*100)) : 0;
+    const over = d.kcal > (state.goals.kcal || 1700) ? " over" : "";
+    const label = d.date.slice(8,10)+"."+d.date.slice(5,7)+".";
+    const value = d.kcal ? Math.round(d.kcal)+"" : "";
+    return `<div class="bar-col" title="${label}: ${Math.round(d.kcal)} kcal / ${Math.round(d.protein)} g Eiweiß"><div class="bar-value">${value}</div><div class="bar${over}" style="height:${pct}%"></div><div class="bar-label">${label}</div></div>`;
+  }).join("") + `</div>`;
+  const selectedKcal = Math.round(sum(getMealsFor(selectedDate()),"kcal"));
+  note.textContent = `Ausgewählter Tag: ${selectedKcal} kcal. Gespeicherte Kalorien gesamt: ${Math.round(total)} kcal.`;
 }
-function drawWeightChart(){
-  const c=document.getElementById("weightChart");
-  const o=setupCanvas(c), ctx=o.ctx, w=o.w, h=o.h, pad=42;
-  drawAxes(ctx,w,h,pad);
-  const note=document.getElementById("weightChartNote");
-  const logs=state.logs.filter(l=>Number(l.weight)).sort((a,b)=>a.date.localeCompare(b.date)).slice(-14);
-  if(logs.length<2){
-    ctx.fillStyle="#657386"; ctx.font="15px system-ui"; ctx.fillText("Mindestens zwei Gewichtswerte erforderlich.", pad+12, h/2);
-    if(logs.length===1){
-      ctx.fillStyle="#1f3a5f"; ctx.font="13px system-ui"; ctx.fillText("Aktuell gespeichert: "+Number(logs[0].weight).toFixed(1)+" kg", pad+12, h/2+24);
-      note.textContent="Ein Gewichtswert ist gespeichert. Für die Linie brauchst du einen zweiten Wert.";
+function renderWeightChart(){
+  const el = document.getElementById("weightChart");
+  const note = document.getElementById("weightChartNote");
+  const logs = (state.logs || []).filter(l=>Number(l.weight)).sort((a,b)=>a.date.localeCompare(b.date)).slice(-14);
+  if(logs.length < 2){
+    if(logs.length === 1){
+      el.innerHTML = `<div class="chart-empty">Ein Gewichtswert gespeichert:<br><b style="font-size:24px;color:var(--blue)">${Number(logs[0].weight).toFixed(1)} kg</b><br>Für eine Linie bitte einen zweiten Wert speichern.</div>`;
+      note.textContent = "Ein Gewichtswert ist gespeichert. Für die Gewichtslinie brauchst du einen zweiten Wert.";
     } else {
-      note.textContent="Für die Gewichtslinie brauchst du mindestens zwei Werte.";
+      el.innerHTML = `<div class="chart-empty">Noch kein Gewicht gespeichert.<br>Bitte unten Gewicht eintragen und „Tageswert speichern“ klicken.</div>`;
+      note.textContent = "Für die Gewichtslinie brauchst du mindestens zwei Werte.";
     }
     return;
   }
-  const vals=logs.map(l=>Number(l.weight));
-  const min=Math.min(...vals)-1, max=Math.max(...vals)+1;
-  const xstep=(w-2*pad)/(logs.length-1);
-  ctx.strokeStyle="#2b8f81"; ctx.lineWidth=3; ctx.beginPath();
-  logs.forEach((l,i)=>{
-    const x=pad+i*xstep, y=h-pad-(h-2*pad)*((Number(l.weight)-min)/(max-min));
-    if(i===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+  const w = 640, h = 230, pad = 28;
+  const vals = logs.map(l=>Number(l.weight));
+  const min = Math.min(...vals)-0.5, max = Math.max(...vals)+0.5;
+  const xStep = (w-2*pad)/(logs.length-1 || 1);
+  const pts = logs.map((l,i)=>{
+    const x = pad+i*xStep;
+    const y = h-pad-(h-2*pad)*((Number(l.weight)-min)/(max-min || 1));
+    return {x,y,l};
   });
-  ctx.stroke();
-  ctx.fillStyle="#1f3a5f"; ctx.font="12px system-ui";
-  logs.forEach((l,i)=>{
-    const x=pad+i*xstep, y=h-pad-(h-2*pad)*((Number(l.weight)-min)/(max-min));
-    ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
-    if(i===0 || i===logs.length-1){ctx.fillText(Number(l.weight).toFixed(1)+" kg", x-18, y-10);}
-  });
-  note.textContent=`Gewichtsverlauf: ${logs[0].weight} kg bis ${logs[logs.length-1].weight} kg.`;
+  const poly = pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
+  el.innerHTML = `<svg class="weight-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+    <line x1="${pad}" y1="${h-pad}" x2="${w-pad}" y2="${h-pad}" stroke="#dce3ec"/>
+    <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${h-pad}" stroke="#dce3ec"/>
+    <polyline points="${poly}" fill="none" stroke="#2b8f81" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+    ${pts.map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="5" fill="#1f3a5f"/>`).join("")}
+    ${pts.map((p,i)=> i===0 || i===pts.length-1 ? `<text x="${Math.max(8,Math.min(w-90,p.x-18))}" y="${Math.max(16,p.y-10)}" font-size="14" fill="#1f3a5f" font-weight="700">${Number(p.l.weight).toFixed(1)} kg</text>` : "").join("")}
+  </svg>`;
+  const diff = Number(logs[logs.length-1].weight)-Number(logs[0].weight);
+  note.textContent = `Gewichtsverlauf: ${logs[0].weight} kg bis ${logs[logs.length-1].weight} kg (${diff>0?"+":""}${diff.toFixed(1)} kg).`;
 }
 function renderWeekSummary(){
   const dates=lastNDates(7);

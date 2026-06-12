@@ -1,25 +1,40 @@
-ABNEHMCOACH PETER V1.1.1
+# AbnehmCoach Peter V1.1.2
 
-Wichtigste Änderungen gegenüber V1.1
-- Das ChatGPT-Schnellimportfeld steht jetzt direkt ganz oben in der App.
-- Die Diagramme wurden korrigiert und robuster gemacht.
-- Die Charts werden nach dem Speichern verzögert und erneut gezeichnet, damit Safari/iPhone/Browser genug Zeit für die Darstellung haben.
-- Der Kalorienbalken bekommt eine Mindesthöhe, damit auch ein kleines Frühstück sichtbar wird.
-- Wenn nur ein Gewichtswert vorhanden ist, zeigt das Gewichtsdiagramm jetzt einen Hinweis statt leer zu bleiben.
-- V1.1.1 versucht vorhandene lokale Daten aus V1.1/V1.0 automatisch zu übernehmen.
+Diese Version korrigiert die lokale Speicherung und die Darstellung der Kalorien-/Gewichtsdaten.
 
-Geprüftes Importformat
+## Wichtigste Änderungen
+
+- Das Schnellimport-Feld bleibt direkt ganz oben.
+- Die Kalorienvisualisierung verwendet jetzt keine Canvas-Grafik mehr, sondern normale HTML-Balken. Dadurch ist die Anzeige in Safari, Chrome und auf dem iPhone robuster.
+- Es gibt eine neue Datenspeicher-Prüfung direkt unter den Tageskacheln:
+  - Mahlzeiten gesamt
+  - Kalorien gesamt
+  - Eiweiß gesamt
+  - Tage mit Essen
+- Die Kaloriengrafik zeigt alle gespeicherten Essenstage, nicht nur ein festes Datumsfenster.
+- Wenn 280 kcal lokal gespeichert sind, müssen sie in der Datenspeicher-Prüfung und in der Balkengrafik sichtbar sein.
+- Die Gewichtsgrafik zeigt schon bei einem einzelnen Gewichtswert einen Hinweis mit dem gespeicherten Wert; eine Linie erscheint weiterhin erst ab zwei Gewichtswerten.
+
+## Sehr wichtig beim Umstieg
+
+Die App speichert lokal im Browser. Damit bestehende Daten erhalten bleiben, am besten die bestehende `index.html` in deinem bisherigen Abnehmcoach-Ordner durch diese neue `index.html` ersetzen. Wenn du die Datei in einem komplett neuen Ordner öffnest, kann der Browser lokale Daten eventuell als neuen Speicherort behandeln.
+
+## Bedienung
+
+1. ChatGPT-Auswertung oben einfügen.
+2. „Schätzung übernehmen“ klicken.
+3. Datum und Mahlzeitenart prüfen.
+4. Optional Foto ergänzen.
+5. „Mahlzeit speichern“ klicken.
+6. In der Datenspeicher-Prüfung kontrollieren, ob Mahlzeiten und Kalorien gezählt werden.
+
+## Importformat
+
 Kalorien: ca. 280 kcal
 Eiweiß: ca. 37 g
 Bewertung: passt gut
 Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan.
 
-Bedienung
-1. ChatGPT-Antwort oben einfügen.
-2. "Schätzung übernehmen" klicken.
-3. Datum/Art prüfen.
-4. Optional Foto hinzufügen.
-5. "Mahlzeit speichern" klicken.
+## Hinweis
 
-Hinweis
-Die App analysiert Bilder weiterhin nicht automatisch. Sie nutzt die Schätzung aus dem ChatGPT-Chat und visualisiert deine Daten lokal.
+Die App analysiert Bilder noch nicht automatisch. Die Schätzung kommt weiterhin aus dem ChatGPT-Chat; die App speichert und visualisiert die Werte lokal.
