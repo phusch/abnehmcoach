@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AbnehmCoach Peter V1.1</title>
+<title>AbnehmCoach Peter V1.1.1</title>
 <style>
 :root{
   --bg:#f5f7fb; --card:#ffffff; --ink:#1f2d3d; --muted:#657386;
@@ -21,33 +21,37 @@ body{
   color:var(--ink);
 }
 header{
-  padding:20px 14px 16px; background:linear-gradient(135deg,var(--blue),var(--teal));
+  padding:18px 14px 14px; background:linear-gradient(135deg,var(--blue),var(--teal));
   color:white; position:sticky; top:0; z-index:10; box-shadow:0 6px 18px rgba(0,0,0,.15)
 }
 .header-inner{max-width:1180px;margin:auto;display:flex;gap:16px;align-items:center;justify-content:space-between;flex-wrap:wrap}
-h1{margin:0;font-size:26px;letter-spacing:.2px}
+h1{margin:0;font-size:25px;letter-spacing:.2px}
 .subtitle{opacity:.92;font-size:14px;margin-top:4px}
 .status-pill{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);border-radius:999px;padding:9px 13px;font-size:13px}
 .navchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
 .navchips a{color:white;text-decoration:none;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:700}
-main{max-width:1180px;margin:22px auto;padding:0 14px 76px}
+main{max-width:1180px;margin:18px auto;padding:0 14px 78px}
 .grid{display:grid;gap:16px}
 .grid.cards{grid-template-columns:repeat(5,minmax(0,1fr))}
 @media(max-width:1050px){.grid.cards{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:760px){.grid.cards{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:520px){.grid.cards{grid-template-columns:1fr}}
 .card{
-  background:rgba(255,255,255,.94); border:1px solid rgba(220,227,236,.9); border-radius:18px;
+  background:rgba(255,255,255,.96); border:1px solid rgba(220,227,236,.9); border-radius:18px;
   box-shadow:var(--shadow); padding:16px; backdrop-filter:blur(4px);
 }
-.kpi{display:flex;flex-direction:column;gap:7px;min-height:130px;position:relative;overflow:hidden}
+.quick-card{
+  border:2px solid rgba(43,143,129,.28);
+  background:linear-gradient(180deg,#ffffff 0%,#f6fffd 100%);
+}
+.kpi{display:flex;flex-direction:column;gap:7px;min-height:126px;position:relative;overflow:hidden}
 .kpi::after{content:"";position:absolute;right:-28px;top:-28px;width:78px;height:78px;border-radius:50%;background:rgba(43,143,129,.09)}
 .kpi .label{font-size:13px;color:var(--muted)}
-.kpi .value{font-size:29px;font-weight:850;color:var(--blue);line-height:1.05}
+.kpi .value{font-size:28px;font-weight:850;color:var(--blue);line-height:1.05}
 .kpi .hint{font-size:12px;color:var(--muted);line-height:1.35}
 .progress{height:11px;background:#edf1f5;border-radius:999px;overflow:hidden}
 .progress span{display:block;height:100%;border-radius:999px;background:var(--teal);width:0%;transition:width .35s ease}
-.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:22px 2px 12px;scroll-margin-top:105px}
+.section-title{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:20px 2px 12px;scroll-margin-top:105px}
 .section-title h2{font-size:20px;margin:0;color:var(--blue)}
 .small{font-size:12px;color:var(--muted)}
 button,.button{
@@ -61,9 +65,10 @@ button.green{background:var(--green)}
 button:active{transform:translateY(1px)}
 .form-grid{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:10px}
 .form-grid .wide{grid-column:span 2}
+.form-grid .wide3{grid-column:span 3}
 .form-grid .full{grid-column:1/-1}
-@media(max-width:900px){.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid .wide{grid-column:span 1}}
-@media(max-width:560px){.form-grid{grid-template-columns:1fr}.form-grid .wide{grid-column:1}.form-grid .full{grid-column:1}}
+@media(max-width:900px){.form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid .wide,.form-grid .wide3{grid-column:span 1}}
+@media(max-width:560px){.form-grid{grid-template-columns:1fr}.form-grid .wide,.form-grid .wide3,.form-grid .full{grid-column:1}}
 label{font-size:12px;font-weight:800;color:var(--blue);display:block;margin-bottom:5px}
 input,select,textarea{
   width:100%;border:1px solid var(--line);border-radius:12px;padding:10px 11px;background:#fff;
@@ -88,7 +93,9 @@ input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 
 .badge.ok{background:var(--softteal);color:#186b60}
 .badge.warn{background:var(--softorange);color:#a65b10}
 .badge.bad{background:var(--softred);color:var(--red)}
-canvas{width:100%;height:270px;border-radius:14px;background:#fff;border:1px solid var(--line)}
+.chart-wrap{width:100%;height:290px;position:relative}
+canvas{display:block;width:100%;height:290px;border-radius:14px;background:#fff;border:1px solid var(--line)}
+.chart-note{font-size:12px;color:var(--muted);margin-top:8px}
 .plan-table{width:100%;border-collapse:separate;border-spacing:0;overflow:hidden;border-radius:14px;border:1px solid var(--line);font-size:13px}
 .plan-table th{background:var(--blue);color:#fff;text-align:left;padding:10px}
 .plan-table td{padding:10px;border-top:1px solid var(--line);vertical-align:top}
@@ -140,10 +147,10 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 <header>
   <div class="header-inner">
     <div>
-      <h1>🥗 AbnehmCoach Peter <span style="font-size:14px;opacity:.8">V1.1</span></h1>
-      <div class="subtitle">Planstart: Freitag, 12.06.2026 · Kalorien · Eiweiß · Gewicht · Bewegung · Essensfotos</div>
+      <h1>🥗 AbnehmCoach Peter <span style="font-size:14px;opacity:.8">V1.1.1</span></h1>
+      <div class="subtitle">Planstart: Freitag, 12.06.2026 · Schnellimport oben · Charts korrigiert</div>
       <div class="navchips">
-        <a href="#eintrag">Mahlzeit</a><a href="#charts">Diagramme</a><a href="#wochencheck">Wochencheck</a><a href="#wochenplan">Wochenplan</a>
+        <a href="#schnellimport">Schnellimport</a><a href="#eintrag">Details</a><a href="#charts">Diagramme</a><a href="#wochencheck">Wochencheck</a><a href="#wochenplan">Plan</a>
       </div>
     </div>
     <div class="status-pill" id="todayText">Heute</div>
@@ -151,42 +158,20 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 </header>
 
 <main>
-  <section class="grid cards">
-    <div class="card kpi">
-      <div class="label">Planstatus</div>
-      <div class="value" id="planDay">Start</div>
-      <div class="hint" id="planHint">Freitag, 12.06.2026</div>
-    </div>
-    <div class="card kpi">
-      <div class="label">Kalorien heute</div>
-      <div class="value"><span id="kcalToday">0</span> kcal</div>
-      <div class="progress"><span id="kcalProgress"></span></div>
-      <div class="hint" id="kcalHint">Ziel wird geladen...</div>
-    </div>
-    <div class="card kpi">
-      <div class="label">Eiweiß heute</div>
-      <div class="value"><span id="proteinToday">0</span> g</div>
-      <div class="progress"><span id="proteinProgress"></span></div>
-      <div class="hint">Ziel: <span id="proteinGoalLabel">110</span> g - Muskelschutz</div>
-    </div>
-    <div class="card kpi">
-      <div class="label">Gewichtstrend</div>
-      <div class="value"><span id="weightTrend">-</span></div>
-      <div class="hint" id="weightHint">Gewichtseinträge ergänzen.</div>
-    </div>
-    <div class="card kpi">
-      <div class="label">Tagesampel</div>
-      <div class="value" id="dayLight">⚪</div>
-      <div class="hint" id="dayLightHint">Noch keine Mahlzeit eingetragen.</div>
-    </div>
-  </section>
-
-  <div class="section-title" id="eintrag">
-    <h2>📸 Mahlzeit eintragen</h2>
-    <span class="small">Foto an ChatGPT → Antwort kopieren → Schnellimport → speichern.</span>
+  <div class="section-title" id="schnellimport" style="margin-top:0">
+    <h2>⚡ Schnellimport deiner ChatGPT-Auswertung</h2>
+    <span class="small">Hier direkt oben einfügen - kein langes Scrollen mehr.</span>
   </div>
-  <section class="card">
+  <section class="card quick-card">
     <div class="form-grid">
+      <div class="full">
+        <label>ChatGPT-Antwort einfügen</label>
+        <textarea id="aiImport" placeholder="Kalorien: ca. 280 kcal
+Eiweiß: ca. 37 g
+Bewertung: passt gut
+Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."></textarea>
+        <div id="importStatus" class="import-ok"></div>
+      </div>
       <div>
         <label>Datum</label>
         <input type="date" id="mealDate">
@@ -203,11 +188,11 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
       </div>
       <div>
         <label>Kalorien</label>
-        <input type="number" id="mealKcal" placeholder="z. B. 550">
+        <input type="number" id="mealKcal" placeholder="z. B. 280">
       </div>
       <div>
         <label>Eiweiß g</label>
-        <input type="number" id="mealProtein" placeholder="z. B. 35">
+        <input type="number" id="mealProtein" placeholder="z. B. 37">
       </div>
       <div>
         <label>Bewertung</label>
@@ -218,43 +203,77 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
           <option value="bad">ungünstig</option>
         </select>
       </div>
-      <div class="wide">
-        <label>Foto</label>
+      <div class="wide3">
+        <label>Foto speichern</label>
         <input type="file" id="mealPhoto" accept="image/*">
       </div>
-      <div class="wide">
-        <label>Kurznotiz</label>
-        <input type="text" id="mealNote" placeholder="z. B. Wasser dazu, 2 Portionen, viel Soße...">
+      <div class="wide3">
+        <label>Kurznotiz / Tipp</label>
+        <input type="text" id="mealNote" placeholder="wird aus Tipp übernommen">
       </div>
       <div class="full">
-        <label>ChatGPT-Schnellimport - exakt geprüftes Format</label>
-        <textarea id="aiImport" placeholder="Kalorien: ca. 550 kcal
-Eiweiß: ca. 35 g
-Bewertung: passt gut
-Tipp: Abends eher leicht und mit Gemüse."></textarea>
-        <div id="importStatus" class="import-ok"></div>
-        <div class="footer-actions" style="margin-top:10px">
-          <button type="button" onclick="parseAI()">Schätzung übernehmen</button>
+        <div class="footer-actions">
+          <button type="button" onclick="parseAI()">1. Schätzung übernehmen</button>
+          <button type="button" class="green" onclick="saveMeal()">2. Mahlzeit speichern</button>
           <button type="button" class="secondary" onclick="copyPrompt()">Prompt für Foto kopieren</button>
-          <button type="button" class="green" onclick="saveMeal()">Mahlzeit speichern</button>
         </div>
       </div>
     </div>
   </section>
 
+  <section class="grid cards" style="margin-top:16px">
+    <div class="card kpi">
+      <div class="label">Planstatus</div>
+      <div class="value" id="planDay">Start</div>
+      <div class="hint" id="planHint">Freitag, 12.06.2026</div>
+    </div>
+    <div class="card kpi">
+      <div class="label">Kalorien heute</div>
+      <div class="value"><span id="kcalToday">0</span> kcal</div>
+      <div class="progress"><span id="kcalProgress"></span></div>
+      <div class="hint" id="kcalHint">Ziel wird geladen...</div>
+    </div>
+    <div class="card kpi">
+      <div class="label">Eiweiß heute</div>
+      <div class="value"><span id="proteinToday">0</span> g</div>
+      <div class="progress"><span id="proteinProgress"></span></div>
+      <div class="hint">Ziel: <span id="proteinGoalLabel">110</span> g</div>
+    </div>
+    <div class="card kpi">
+      <div class="label">Gewichtstrend</div>
+      <div class="value"><span id="weightTrend">-</span></div>
+      <div class="hint" id="weightHint">Gewichtseinträge ergänzen.</div>
+    </div>
+    <div class="card kpi">
+      <div class="label">Tagesampel</div>
+      <div class="value" id="dayLight">⚪</div>
+      <div class="hint" id="dayLightHint">Noch keine Mahlzeit eingetragen.</div>
+    </div>
+  </section>
+
   <div class="section-title" id="charts">
     <h2>📊 Verlauf & Visualisierung</h2>
-    <span class="small">Kalorienaufnahme und Abnehmerfolg auf einen Blick</span>
+    <span class="small">V1.1.1: Charts werden nach jedem Speichern neu gezeichnet.</span>
   </div>
   <section class="two-col">
     <div class="card">
       <h3 style="margin-top:0;color:var(--blue)">Kalorien der letzten 14 Tage</h3>
-      <canvas id="kcalChart" width="800" height="320"></canvas>
+      <div class="chart-wrap"><canvas id="kcalChart"></canvas></div>
+      <div class="chart-note" id="kcalChartNote">Noch keine Kalorien eingetragen.</div>
     </div>
     <div class="card">
       <h3 style="margin-top:0;color:var(--blue)">Gewicht & Bauchumfang</h3>
-      <canvas id="weightChart" width="800" height="320"></canvas>
+      <div class="chart-wrap"><canvas id="weightChart"></canvas></div>
+      <div class="chart-note" id="weightChartNote">Für die Gewichtslinie brauchst du mindestens zwei Werte.</div>
     </div>
+  </section>
+
+  <div class="section-title" id="eintrag">
+    <h2>📸 Mahlzeitendetails</h2>
+    <span class="small">Das Eingabefeld ist jetzt oben; hier siehst du nur nochmal die gespeicherten Mahlzeiten.</span>
+  </div>
+  <section class="card">
+    <div id="mealList" class="meal-list"></div>
   </section>
 
   <div class="section-title" id="wochencheck">
@@ -273,7 +292,7 @@ Tipp: Abends eher leicht und mit Gemüse."></textarea>
 
   <div class="section-title">
     <h2>⚖️ Gewicht, Bauchumfang & Bewegung</h2>
-    <span class="small">Morgens oder wöchentlich eintragen</span>
+    <span class="small">Morgens oder wöchentlich eintragen und aktiv speichern</span>
   </div>
   <section class="card">
     <div class="form-grid">
@@ -283,7 +302,7 @@ Tipp: Abends eher leicht und mit Gemüse."></textarea>
       </div>
       <div>
         <label>Gewicht kg</label>
-        <input type="number" step="0.1" id="logWeight" placeholder="z. B. 95.6">
+        <input type="number" step="0.1" id="logWeight" placeholder="z. B. 96.0">
       </div>
       <div>
         <label>Bauchumfang cm</label>
@@ -312,15 +331,15 @@ Tipp: Abends eher leicht und mit Gemüse."></textarea>
   </section>
 
   <div class="section-title">
-    <h2>🍽 Mahlzeiten heute</h2>
+    <h2>💾 Daten & Backup</h2>
+  </div>
+  <section class="card">
     <div class="footer-actions">
       <button class="secondary" onclick="exportData()">Backup exportieren</button>
       <label class="button secondary" style="margin:0">Backup importieren<input type="file" id="importFile" accept="application/json" class="hidden" onchange="importData(event)"></label>
       <button class="red" onclick="resetData()">Daten löschen</button>
     </div>
-  </div>
-  <section class="card">
-    <div id="mealList" class="meal-list"></div>
+    <p class="small">Wichtig: Daten liegen lokal im Browser. Regelmäßig Backup exportieren.</p>
   </section>
 
   <div class="section-title" id="wochenplan">
@@ -342,17 +361,6 @@ Tipp: Abends eher leicht und mit Gemüse."></textarea>
   </section>
 
   <div class="section-title">
-    <h2>🧩 Antwortformat für deine Essensbilder</h2>
-  </div>
-  <section class="card">
-    <p class="small">Dieses Format kann die App sicher lesen. Meine künftigen Bildantworten werde ich genau so beginnen.</p>
-    <div class="template">Kalorien: ca. 550 kcal
-Eiweiß: ca. 35 g
-Bewertung: passt gut
-Tipp: Abends eher leicht und mit Gemüse.</div>
-  </section>
-
-  <div class="section-title">
     <h2>⚙️ Ziele einstellen</h2>
   </div>
   <section class="card">
@@ -367,14 +375,15 @@ Tipp: Abends eher leicht und mit Gemüse.</div>
 </main>
 
 <nav class="bottom-nav">
-  <a href="#eintrag"><span>📸</span>Eintrag</a>
+  <a href="#schnellimport"><span>⚡</span>Import</a>
   <a href="#charts"><span>📊</span>Charts</a>
   <a href="#wochencheck"><span>🧾</span>Check</a>
   <a href="#wochenplan"><span>🗓</span>Plan</a>
 </nav>
 
 <script>
-const KEY = "abnehmcoach_peter_v11";
+const KEY = "abnehmcoach_peter_v111";
+const OLD_KEYS = ["abnehmcoach_peter_v11","abnehmcoach_peter_v1"];
 const PLAN_START = "2026-06-12";
 const PLAN_START_LABEL = "Freitag, 12.06.2026";
 const today = new Date();
@@ -385,15 +394,34 @@ let state = load();
 
 function defaultState(){
   return {
-    version:"1.1",
+    version:"1.1.1",
     goals:{kcal:1700, protein:110, move:30},
     meals:[],
     logs:[{date:PLAN_START, weight:96, belly:null, move:0, moveType:"Planstart"}]
   };
 }
+function migrateOldData(){
+  for(const key of OLD_KEYS){
+    try{
+      const raw = localStorage.getItem(key);
+      if(raw){
+        const old = JSON.parse(raw);
+        if(old && (old.meals || old.logs)){
+          old.version = "1.1.1-migrated";
+          localStorage.setItem(KEY, JSON.stringify(old));
+          return old;
+        }
+      }
+    }catch(e){}
+  }
+  return null;
+}
 function load(){
-  try { return JSON.parse(localStorage.getItem(KEY)) || defaultState(); }
-  catch(e){ return defaultState(); }
+  try {
+    const raw = localStorage.getItem(KEY);
+    if(raw) return JSON.parse(raw);
+    return migrateOldData() || defaultState();
+  } catch(e){ return defaultState(); }
 }
 function persist(){ localStorage.setItem(KEY, JSON.stringify(state)); }
 function parseNum(s){
@@ -410,23 +438,25 @@ function init(){
   document.getElementById("mealDate").value = activeDate;
   document.getElementById("logDate").value = activeDate;
   document.getElementById("mealTime").value = pad(today.getHours()) + ":" + pad(today.getMinutes());
-  document.getElementById("goalKcal").value = state.goals.kcal;
-  document.getElementById("goalProtein").value = state.goals.protein;
-  document.getElementById("goalMove").value = state.goals.move;
+  document.getElementById("goalKcal").value = state.goals.kcal || 1700;
+  document.getElementById("goalProtein").value = state.goals.protein || 110;
+  document.getElementById("goalMove").value = state.goals.move || 30;
   document.getElementById("todayText").textContent = new Intl.DateTimeFormat("de-DE",{weekday:"long", day:"2-digit", month:"2-digit", year:"numeric"}).format(today);
   render();
+  window.addEventListener("resize", scheduleCharts);
 }
 function getMealsFor(date){return state.meals.filter(m => m.date === date);}
 function sum(arr, field){return arr.reduce((a,b)=>a+(Number(b[field])||0),0)}
 function pct(val, goal){return Math.max(0, Math.min(100, goal ? (val/goal*100) : 0));}
+function selectedDate(){ return document.getElementById("mealDate").value || activeDate; }
 
 function render(){
   renderPlanStatus();
-  const selectedDate = document.getElementById("mealDate").value || activeDate;
-  const todaysMeals = state.meals.filter(m=>m.date===selectedDate);
+  const d = selectedDate();
+  const todaysMeals = state.meals.filter(m=>m.date===d);
   const kcal = sum(todaysMeals,"kcal");
   const protein = sum(todaysMeals,"protein");
-  const todaysLog = state.logs.filter(l=>l.date===selectedDate).slice(-1)[0] || {};
+  const todaysLog = state.logs.filter(l=>l.date===d).slice(-1)[0] || {};
   const move = Number(todaysLog.move)||0;
   document.getElementById("kcalToday").textContent = Math.round(kcal);
   document.getElementById("proteinToday").textContent = Math.round(protein);
@@ -437,10 +467,14 @@ function render(){
   document.getElementById("kcalHint").textContent = rest >= 0 ? `${Math.round(rest)} kcal bis Tagesziel ${state.goals.kcal}` : `${Math.abs(Math.round(rest))} kcal über Tagesziel`;
   renderDayLight(kcal, protein, move);
   renderWeightTrend();
-  renderMeals(selectedDate);
+  renderMeals(d);
   renderWeekSummary();
-  drawKcalChart();
-  drawWeightChart();
+  scheduleCharts();
+}
+let chartTimer = null;
+function scheduleCharts(){
+  clearTimeout(chartTimer);
+  chartTimer = setTimeout(()=>requestAnimationFrame(()=>{ drawKcalChart(); drawWeightChart(); }), 50);
 }
 function renderPlanStatus(){
   const diff = daysBetween(PLAN_START, isoToday);
@@ -455,11 +489,10 @@ function renderDayLight(kcal, protein, move){
   const kcalOk = kcal <= state.goals.kcal * 1.05;
   const kcalLow = kcal < 1000;
   const proteinOk = protein >= state.goals.protein * 0.75;
-  const moveOk = move >= Math.min(20,state.goals.move);
   if(kcalOk && proteinOk){ el.textContent="🟢"; hint.textContent="Guter Tag: Kalorien und Eiweiß passen."; }
-  else if(kcalOk && !proteinOk){ el.textContent="🟡"; hint.textContent="Kalorien ok, aber Eiweiß noch erhöhen."; }
+  else if(kcalOk && !proteinOk){ el.textContent="🟡"; hint.textContent="Kalorien ok, Eiweiß weiter sammeln."; }
   else if(kcalLow){ el.textContent="🟡"; hint.textContent="Sehr wenig Kalorien - bitte nicht crashen."; }
-  else { el.textContent="🟠"; hint.textContent="Kalorien im Blick behalten, nächste Mahlzeit leichter."; }
+  else { el.textContent="🟠"; hint.textContent="Nächste Mahlzeit leichter halten."; }
 }
 function renderWeightTrend(){
   const weights = state.logs.filter(l=>Number(l.weight)).sort((a,b)=>a.date.localeCompare(b.date));
@@ -479,7 +512,7 @@ function ratingBadge(r){
 function renderMeals(date){
   const list = document.getElementById("mealList");
   const meals = state.meals.filter(m=>m.date===date).sort((a,b)=>(a.time||"").localeCompare(b.time||""));
-  if(!meals.length){ list.innerHTML = `<div class="tip">Für ${formatDate(date)} ist noch nichts eingetragen. Foto an ChatGPT schicken, Schätzung übernehmen und hier speichern.</div>`; return; }
+  if(!meals.length){ list.innerHTML = `<div class="tip">Für ${formatDate(date)} ist noch nichts eingetragen. Schnellimport oben nutzen und Mahlzeit speichern.</div>`; return; }
   list.innerHTML = meals.map(m=>`
     <div class="meal">
       ${m.photo ? `<img src="${m.photo}" class="thumb" alt="Essensfoto">` : `<div class="thumb" style="display:flex;align-items:center;justify-content:center;color:#8b98a8">kein Foto</div>`}
@@ -507,10 +540,10 @@ function parseAI(){
   else if(/Bewertung\s*:\s*(vorsichtig|eher ungünstig)/i.test(t)) document.getElementById("mealRating").value = "warn";
   else if(/Bewertung\s*:\s*ungünstig/i.test(t)) document.getElementById("mealRating").value = "bad";
   const tip = t.match(/Tipp\s*:\s*(.+)/i);
-  if(tip && !document.getElementById("mealNote").value) document.getElementById("mealNote").value = tip[1].slice(0,160);
+  if(tip) document.getElementById("mealNote").value = tip[1].slice(0,180);
   const status = document.getElementById("importStatus");
   status.style.display = "block";
-  status.textContent = `Import geprüft: ${kcal !== null ? "Kalorien erkannt" : "Kalorien fehlen"} · ${protein !== null ? "Eiweiß erkannt" : "Eiweiß fehlt"}.`;
+  status.textContent = `Import geprüft: ${kcal !== null ? "Kalorien erkannt" : "Kalorien fehlen"} · ${protein !== null ? "Eiweiß erkannt" : "Eiweiß fehlt"}. Danach bitte "Mahlzeit speichern" klicken.`;
 }
 function copyPrompt(){
   const prompt = `Bitte bewerte dieses Essensfoto für meinen Abnehmplan. Antworte zuerst exakt in diesem Format, damit ich es in meine AbnehmCoach-App kopieren kann:
@@ -547,6 +580,7 @@ function saveMeal(){
     document.getElementById("importStatus").style.display="none";
     document.getElementById("mealPhoto").value="";
     render();
+    setTimeout(()=>document.getElementById("charts").scrollIntoView({behavior:"smooth",block:"start"}), 150);
   };
   if(file){
     const reader = new FileReader();
@@ -594,7 +628,7 @@ function exportData(){
   const blob = new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "abnehmcoach_v11_backup_" + activeDate + ".json";
+  a.download = "abnehmcoach_v111_backup_" + activeDate + ".json";
   a.click();
 }
 function importData(evt){
@@ -614,38 +648,77 @@ function resetData(){
   }
 }
 function lastNDates(n){
-  const arr=[]; const d=new Date(activeDate+"T00:00:00");
+  const arr=[]; const d=new Date(selectedDate()+"T00:00:00");
   for(let i=n-1;i>=0;i--){let x=new Date(d);x.setDate(d.getDate()-i);arr.push(x.toISOString().slice(0,10));}
   return arr;
 }
+function setupCanvas(canvas){
+  const rect = canvas.getBoundingClientRect();
+  let cssW = Math.max(320, Math.floor(rect.width || canvas.parentElement.clientWidth || 600));
+  let cssH = Math.max(240, Math.floor(rect.height || 290));
+  const ratio = window.devicePixelRatio || 1;
+  canvas.width = Math.floor(cssW * ratio);
+  canvas.height = Math.floor(cssH * ratio);
+  const ctx = canvas.getContext("2d");
+  ctx.setTransform(ratio,0,0,ratio,0,0);
+  return {ctx,w:cssW,h:cssH};
+}
 function drawAxes(ctx,w,h,pad){
   ctx.clearRect(0,0,w,h);
+  ctx.fillStyle="#ffffff"; ctx.fillRect(0,0,w,h);
   ctx.strokeStyle="#dce3ec"; ctx.lineWidth=1;
   ctx.beginPath(); ctx.moveTo(pad, pad); ctx.lineTo(pad,h-pad); ctx.lineTo(w-pad,h-pad); ctx.stroke();
 }
 function drawKcalChart(){
-  const c=document.getElementById("kcalChart"), ctx=c.getContext("2d"), w=c.width, h=c.height, pad=45;
+  const c=document.getElementById("kcalChart");
+  const o=setupCanvas(c), ctx=o.ctx, w=o.w, h=o.h, pad=42;
   drawAxes(ctx,w,h,pad);
   const dates=lastNDates(14);
   const vals=dates.map(d=>sum(getMealsFor(d),"kcal"));
+  const total=vals.reduce((a,b)=>a+b,0);
+  const note=document.getElementById("kcalChartNote");
+  if(total<=0){
+    ctx.fillStyle="#657386"; ctx.font="15px system-ui"; ctx.fillText("Noch keine Kalorien eingetragen.", pad+12, h/2);
+    note.textContent="Noch keine Kalorien eingetragen.";
+    return;
+  }
   const max=Math.max(state.goals.kcal, ...vals, 1000)*1.15;
-  const bw=(w-2*pad)/dates.length*0.68, gap=(w-2*pad)/dates.length;
-  ctx.font="12px system-ui"; ctx.fillStyle="#657386";
+  const gap=(w-2*pad)/dates.length;
+  const bw=Math.max(8,gap*0.62);
+  ctx.font="11px system-ui";
   vals.forEach((v,i)=>{
-    const x=pad+i*gap+gap*.16, barH=(h-2*pad)*(v/max), y=h-pad-barH;
+    const x=pad+i*gap+gap*.19;
+    let barH=(h-2*pad)*(v/max);
+    if(v>0 && barH<4) barH=4;
+    const y=h-pad-barH;
     ctx.fillStyle=v>state.goals.kcal?"#f2994a":"#2b8f81";
     ctx.fillRect(x,y,bw,barH);
-    if(i%2===0){ctx.fillStyle="#657386";ctx.fillText(dates[i].slice(5),x-2,h-pad+18);}
+    if(i%2===0 || dates[i]===selectedDate()){
+      ctx.fillStyle="#657386";
+      ctx.fillText(dates[i].slice(5),x-3,h-pad+17);
+    }
   });
   const gy=h-pad-(h-2*pad)*(state.goals.kcal/max);
   ctx.strokeStyle="#1f3a5f"; ctx.setLineDash([6,5]); ctx.beginPath(); ctx.moveTo(pad,gy); ctx.lineTo(w-pad,gy); ctx.stroke(); ctx.setLineDash([]);
-  ctx.fillStyle="#1f3a5f"; ctx.fillText("Ziel "+state.goals.kcal+" kcal", pad+8, gy-8);
+  ctx.fillStyle="#1f3a5f"; ctx.font="12px system-ui"; ctx.fillText("Ziel "+state.goals.kcal+" kcal", pad+8, Math.max(14,gy-8));
+  note.textContent=`Gespeichert: ${Math.round(sum(getMealsFor(selectedDate()),"kcal"))} kcal am ausgewählten Tag.`;
 }
 function drawWeightChart(){
-  const c=document.getElementById("weightChart"), ctx=c.getContext("2d"), w=c.width, h=c.height, pad=45;
+  const c=document.getElementById("weightChart");
+  const o=setupCanvas(c), ctx=o.ctx, w=o.w, h=o.h, pad=42;
   drawAxes(ctx,w,h,pad);
+  const note=document.getElementById("weightChartNote");
   const logs=state.logs.filter(l=>Number(l.weight)).sort((a,b)=>a.date.localeCompare(b.date)).slice(-14);
-  if(logs.length<2){ctx.fillStyle="#657386";ctx.font="16px system-ui";ctx.fillText("Trage mindestens zwei Gewichtswerte ein.", pad+20, h/2); return;}
+  if(logs.length<2){
+    ctx.fillStyle="#657386"; ctx.font="15px system-ui"; ctx.fillText("Mindestens zwei Gewichtswerte erforderlich.", pad+12, h/2);
+    if(logs.length===1){
+      ctx.fillStyle="#1f3a5f"; ctx.font="13px system-ui"; ctx.fillText("Aktuell gespeichert: "+Number(logs[0].weight).toFixed(1)+" kg", pad+12, h/2+24);
+      note.textContent="Ein Gewichtswert ist gespeichert. Für die Linie brauchst du einen zweiten Wert.";
+    } else {
+      note.textContent="Für die Gewichtslinie brauchst du mindestens zwei Werte.";
+    }
+    return;
+  }
   const vals=logs.map(l=>Number(l.weight));
   const min=Math.min(...vals)-1, max=Math.max(...vals)+1;
   const xstep=(w-2*pad)/(logs.length-1);
@@ -661,6 +734,7 @@ function drawWeightChart(){
     ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fill();
     if(i===0 || i===logs.length-1){ctx.fillText(Number(l.weight).toFixed(1)+" kg", x-18, y-10);}
   });
+  note.textContent=`Gewichtsverlauf: ${logs[0].weight} kg bis ${logs[logs.length-1].weight} kg.`;
 }
 function renderWeekSummary(){
   const dates=lastNDates(7);
