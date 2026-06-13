@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AbnehmCoach Peter V1.1.5</title>
+<title>AbnehmCoach Peter V1.1.6</title>
 <style>
 :root{
   --bg:#f5f7fb; --card:#ffffff; --ink:#1f2d3d; --muted:#657386;
@@ -93,7 +93,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 
 .badge.warn{background:var(--softorange);color:#a65b10}
 .badge.bad{background:var(--softred);color:var(--red)}
 .chart-wrap{width:100%;height:290px;position:relative}
-/* V1.1.5: Charts als HTML/SVG statt Canvas, damit Safari/Druck/Browser zuverlässiger anzeigen */
+/* V1.1.6: Charts als HTML/SVG statt Canvas, damit Safari/Druck/Browser zuverlässiger anzeigen */
 .html-chart{width:100%;min-height:290px;border-radius:14px;background:#fff;border:1px solid var(--line);padding:14px;overflow:hidden}
 .bar-chart{display:flex;gap:8px;align-items:flex-end;height:215px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 8px 0 8px}
 .bar-col{flex:1;min-width:22px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:5px}
@@ -115,13 +115,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 
   padding:12px 14px;border-radius:15px;background:#fff8ed;border:1px solid #ffd9ad;color:#5c3a12;
   font-size:14px;line-height:1.45
 }
-.ampel{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-@media(max-width:700px){.ampel{grid-template-columns:1fr}}
-.ampel div{padding:12px;border-radius:14px;font-size:13px;line-height:1.35}
-.ampel b{display:block;margin-bottom:5px}
-.greenbox{background:var(--softgreen);border:1px solid #cbe8c8}
-.yellowbox{background:#fff7df;border:1px solid #ffe0a0}
-.redbox{background:var(--softred);border:1px solid #ffc0b8}
+
 .footer-actions{display:flex;gap:10px;flex-wrap:wrap}
 hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 .hidden{display:none}
@@ -216,13 +210,106 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 }
 .bar{position:relative;z-index:2}
 
+
+.eval-grid{
+  display:grid;
+  grid-template-columns:1.1fr .9fr;
+  gap:16px;
+}
+@media(max-width:900px){.eval-grid{grid-template-columns:1fr}}
+.gauge-wrap{
+  display:grid;
+  grid-template-columns:210px 1fr;
+  gap:16px;
+  align-items:center;
+}
+@media(max-width:640px){.gauge-wrap{grid-template-columns:1fr;text-align:center}.gauge-info{text-align:left}}
+.gauge{
+  width:210px;
+  height:126px;
+  margin:auto;
+  position:relative;
+}
+.gauge svg{width:210px;height:126px;display:block}
+.gauge-number{
+  position:absolute;
+  left:0;right:0;bottom:3px;
+  text-align:center;
+  font-size:28px;
+  font-weight:900;
+  color:var(--blue);
+}
+.gauge-label{
+  position:absolute;
+  left:0;right:0;bottom:-18px;
+  text-align:center;
+  font-size:12px;
+  color:var(--muted);
+}
+.gauge-info h3{margin:0 0 8px;color:var(--blue)}
+.gauge-status{
+  display:inline-block;
+  border-radius:999px;
+  padding:6px 10px;
+  font-weight:900;
+  font-size:13px;
+  margin-bottom:8px;
+}
+.gauge-status.low{background:#e8f6e8;color:#2f7d1c}
+.gauge-status.good{background:#dff7ef;color:#126a55}
+.gauge-status.ok{background:#fff4e6;color:#a65b10}
+.gauge-status.high{background:#ffe9e7;color:#c0392b}
+.eval-metrics{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:10px;
+}
+@media(max-width:520px){.eval-metrics{grid-template-columns:1fr}}
+.eval-mini{
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:#fff;
+  padding:12px;
+}
+.eval-mini span{display:block;font-size:12px;color:var(--muted)}
+.eval-mini b{display:block;font-size:22px;color:var(--blue);margin-top:4px}
+.scale-legend{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:6px;
+  margin-top:14px;
+}
+@media(max-width:620px){.scale-legend{grid-template-columns:repeat(2,1fr)}}
+.scale-legend div{
+  border-radius:11px;
+  padding:8px;
+  font-size:11px;
+  font-weight:800;
+  text-align:center;
+}
+.legend-low{background:#d8f2d5;color:#2f7d1c}
+.legend-good{background:#dff7ef;color:#126a55}
+.legend-ok{background:#fff4e6;color:#a65b10}
+.legend-high{background:#ffe9e7;color:#c0392b}
+.weight-eval-line{
+  margin-top:12px;
+  padding:11px 12px;
+  border-radius:14px;
+  background:#f8fbff;
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.4;
+}
+.weight-eval-line b{color:var(--blue)}
+
 </style>
 </head>
 <body>
 <header>
   <div class="header-inner">
     <div>
-      <h1>🥗 AbnehmCoach Peter <span style="font-size:14px;opacity:.8">V1.1.5</span></h1>
+      <h1>🥗 AbnehmCoach Peter <span style="font-size:14px;opacity:.8">V1.1.6</span></h1>
       <div class="subtitle">Planstart: Freitag, 12.06.2026 · Schnellimport oben · Charts ohne Canvas korrigiert</div>
     </div>
     <div class="status-pill" id="todayText">Heute</div>
@@ -327,6 +414,41 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
   </section>
 
   
+
+  <div class="section-title" id="auswertung">
+    <h2>🚦 Tagesauswertung</h2>
+    <span class="small">Fokus auf Auswertung statt Anleitung</span>
+  </div>
+  <section class="card">
+    <div class="eval-grid">
+      <div>
+        <div class="gauge-wrap">
+          <div class="gauge" id="calorieGauge"></div>
+          <div class="gauge-info">
+            <h3>Kalorien-Tacho</h3>
+            <div id="calorieGaugeStatus" class="gauge-status good">Noch keine Daten</div>
+            <div class="small" id="calorieGaugeText">Nach dem Speichern einer Mahlzeit erscheint hier die Tagesbewertung.</div>
+            <div class="scale-legend">
+              <div class="legend-low">markergrün<br>zu wenig</div>
+              <div class="legend-good">grün<br>sehr gut</div>
+              <div class="legend-ok">orange<br>etwas zu viel</div>
+              <div class="legend-high">rot<br>deutlich zu viel</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="eval-metrics">
+          <div class="eval-mini"><span>Gewichtsverlust gesamt</span><b id="evalWeightLoss">-</b></div>
+          <div class="eval-mini"><span>Rest bis Zielgewicht</span><b id="evalWeightToGoal">-</b></div>
+          <div class="eval-mini"><span>Kalorien heute</span><b id="evalKcalToday">0</b></div>
+          <div class="eval-mini"><span>Bewegung heute</span><b id="evalMoveToday">0 Min</b></div>
+        </div>
+        <div class="weight-eval-line" id="weightEvalText">Sobald zwei Gewichtswerte gespeichert sind, wird hier dein Gewichtsverlust ausgewertet.</div>
+      </div>
+    </div>
+  </section>
+
 <div class="section-title" id="eintrag">
     <h2>📸 Mahlzeitendetails</h2>
     <span class="small">Das Eingabefeld ist jetzt oben; hier siehst du nur nochmal die gespeicherten Mahlzeiten.</span>
@@ -336,7 +458,7 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
   </section>
 <div class="section-title" id="charts">
     <h2>📊 Verlauf & Visualisierung</h2>
-    <span class="small">V1.1.5: Visualisierung ohne Canvas - gespeicherte Daten werden zuverlässig als Balken angezeigt.</span>
+    <span class="small">V1.1.6: Visualisierung ohne Canvas - gespeicherte Daten werden zuverlässig als Balken angezeigt.</span>
   </div>
   <section class="two-col">
     <div class="card">
@@ -438,12 +560,6 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
         <button type="button" class="green" onclick="saveLog()">Tageswert speichern</button>
       </div>
     </div>
-    <hr>
-    <div class="ampel">
-      <div class="greenbox"><b>Grün</b>Du kannst ganze Sätze sprechen. Belastung passt.</div>
-      <div class="yellowbox"><b>Gelb</b>Du musst oft Luft holen. Tempo sofort reduzieren.</div>
-      <div class="redbox"><b>Rot</b>Luftnot, Druck, Schwindel oder Brustenge: sofort stoppen.</div>
-    </div>
   </section>
   <div class="section-title" id="speichercheck">
     <h2>🧪 Datenspeicherprüfung</h2>
@@ -480,14 +596,14 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
 
 <nav class="bottom-nav">
   <a href="#schnellimport"><span>⚡</span>Import</a>
-  <a href="#charts"><span>📊</span>Charts</a>
-  <a href="#wochencheck"><span>🧾</span>Check</a>
-  <a href="#wochenplan"><span>🗓</span>Plan</a>
+  <a href="#auswertung"><span>🚦</span>Tacho</a>
+  <a href="#eintrag"><span>🍽</span>Heute</a>
+  <a href="#koerperwerte"><span>⚖️</span>Körper</a>
 </nav>
 
 <script>
-const KEY = "abnehmcoach_peter_v115";
-const OLD_KEYS = ["abnehmcoach_peter_v114","abnehmcoach_peter_v113","abnehmcoach_peter_v112","abnehmcoach_peter_v111","abnehmcoach_peter_v11","abnehmcoach_peter_v1"];
+const KEY = "abnehmcoach_peter_v116";
+const OLD_KEYS = ["abnehmcoach_peter_v115","abnehmcoach_peter_v114","abnehmcoach_peter_v113","abnehmcoach_peter_v112","abnehmcoach_peter_v111","abnehmcoach_peter_v11","abnehmcoach_peter_v1"];
 const PLAN_START = "2026-06-12";
 const PLAN_START_LABEL = "Freitag, 12.06.2026";
 const today = new Date();
@@ -797,7 +913,7 @@ function exportData(){
   const blob = new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "abnehmcoach_v115_backup_" + activeDate + ".json";
+  a.download = "abnehmcoach_v116_backup_" + activeDate + ".json";
   a.click();
 }
 function importData(evt){
@@ -946,6 +1062,99 @@ function renderWeekSummary(){
   document.getElementById("weekComment").textContent=comment;
 }
 
+
+
+function renderEvaluation(){
+  const d = selectedDate();
+  const meals = getMealsFor(d);
+  const kcal = sum(meals,"kcal");
+  const todaysLog = (state.logs || []).filter(l=>l.date===d).slice(-1)[0] || {};
+  const move = Number(todaysLog.move)||0;
+  const goal = Number(state.goals.kcal)||1700;
+  const goalWeight = Number(state.goals.weight)||86;
+
+  const setText = (id, value) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
+  };
+  setText("evalKcalToday", Math.round(kcal) + " kcal");
+  setText("evalMoveToday", Math.round(move) + " Min");
+
+  let ratio = goal ? kcal/goal : 0;
+  let angle = Math.max(-90, Math.min(90, -90 + ratio*180));
+  let status = "Noch keine Daten";
+  let statusClass = "good";
+  let text = "Nach dem Speichern einer Mahlzeit erscheint hier die Tagesbewertung.";
+  if(kcal > 0){
+    if(ratio < 0.75){
+      status = "Zu wenig Kalorien";
+      statusClass = "low";
+      text = "Heute liegst du sehr niedrig. Das ist nicht automatisch besser - bitte ausreichend Eiweiß und eine sinnvolle Mahlzeit einplanen.";
+    } else if(ratio <= 1.05){
+      status = "Sehr gut im Zielbereich";
+      statusClass = "good";
+      text = "Sehr gut: Du liegst im Zielbereich. Jetzt vor allem Eiweiß und Sättigung stabil halten.";
+    } else if(ratio <= 1.20){
+      status = "Etwas zu viel";
+      statusClass = "ok";
+      text = "Etwas über Ziel. Kein Drama - nächste Mahlzeit leichter und eiweißbetont halten.";
+    } else {
+      status = "Deutlich zu viel";
+      statusClass = "high";
+      text = "Deutlich über Ziel. Heute keine Kalorien retten wollen, aber Snacks/Extras stoppen und morgen sauber weitermachen.";
+    }
+  }
+
+  const gauge = document.getElementById("calorieGauge");
+  if(gauge){
+    gauge.innerHTML = `<svg viewBox="0 0 210 126" aria-label="Kalorien-Tacho">
+      <path d="M25 105 A80 80 0 0 1 65 35" fill="none" stroke="#d8f2d5" stroke-width="18" stroke-linecap="round"/>
+      <path d="M65 35 A80 80 0 0 1 145 35" fill="none" stroke="#dff7ef" stroke-width="18" stroke-linecap="round"/>
+      <path d="M145 35 A80 80 0 0 1 176 74" fill="none" stroke="#fff4e6" stroke-width="18" stroke-linecap="round"/>
+      <path d="M176 74 A80 80 0 0 1 185 105" fill="none" stroke="#ffe9e7" stroke-width="18" stroke-linecap="round"/>
+      <line x1="105" y1="105" x2="105" y2="34" stroke="#1f3a5f" stroke-width="5" stroke-linecap="round" transform="rotate(${angle} 105 105)"/>
+      <circle cx="105" cy="105" r="8" fill="#1f3a5f"/>
+      <text x="25" y="123" font-size="10" fill="#657386">0</text>
+      <text x="91" y="23" font-size="10" fill="#657386">Ziel</text>
+      <text x="174" y="123" font-size="10" fill="#657386">zu viel</text>
+    </svg>
+    <div class="gauge-number">${Math.round(kcal)}</div>
+    <div class="gauge-label">von ${Math.round(goal)} kcal</div>`;
+  }
+  const statusEl = document.getElementById("calorieGaugeStatus");
+  if(statusEl){
+    statusEl.className = "gauge-status " + statusClass;
+    statusEl.textContent = status;
+  }
+  const textEl = document.getElementById("calorieGaugeText");
+  if(textEl) textEl.textContent = text;
+
+  const weights = (state.logs || []).filter(l=>Number(l.weight)).sort((a,b)=>a.date.localeCompare(b.date));
+  const weightText = document.getElementById("weightEvalText");
+  if(weights.length >= 2){
+    const first = Number(weights[0].weight);
+    const last = Number(weights[weights.length-1].weight);
+    const loss = first - last;
+    const rest = last - goalWeight;
+    setText("evalWeightLoss", (loss>=0 ? "-" : "+") + Math.abs(loss).toFixed(1).replace(".", ",") + " kg");
+    setText("evalWeightToGoal", rest>0 ? rest.toFixed(1).replace(".", ",") + " kg" : "Ziel erreicht");
+    if(weightText){
+      weightText.innerHTML = `Start: <b>${first.toFixed(1).replace(".", ",")} kg</b> · aktuell: <b>${last.toFixed(1).replace(".", ",")} kg</b> · Ziel: <b>${goalWeight.toFixed(1).replace(".", ",")} kg</b>.`;
+    }
+  } else if(weights.length === 1){
+    const last = Number(weights[0].weight);
+    const rest = last - goalWeight;
+    setText("evalWeightLoss", "-");
+    setText("evalWeightToGoal", rest>0 ? rest.toFixed(1).replace(".", ",") + " kg" : "Ziel erreicht");
+    if(weightText){
+      weightText.innerHTML = `Ein Gewichtswert gespeichert: <b>${last.toFixed(1).replace(".", ",")} kg</b>. Für Gewichtsverlust-Auswertung bitte einen zweiten Wert speichern.`;
+    }
+  } else {
+    setText("evalWeightLoss", "-");
+    setText("evalWeightToGoal", "-");
+    if(weightText) weightText.textContent = "Sobald ein Gewichtswert gespeichert ist, wird hier der Abstand zum Zielgewicht angezeigt.";
+  }
+}
 
 function renderTargetLabels(){
   const setText = (id, value) => {
