@@ -1,10 +1,10 @@
-# AbnehmCoach Peter V1.1.5
+AbnehmCoach Peter V1.1.5
 
-## Änderungen in V1.1.5
+#Änderungen in V1.1.5
 
 Diese Version basiert auf V1.1.4.
 
-### Neu
+##Neu
 
 1. Gespeicherte Mahlzeiten können nachträglich bearbeitet werden.
    - Datum
@@ -28,6 +28,6 @@ Diese Version basiert auf V1.1.4.
    - Standard: 86,0 kg
    - kann unten bei „Ziele einstellen“ geändert werden
 
-## Hinweis zur automatischen Fotoanalyse
+#Hinweis zur automatischen Fotoanalyse
 
 Diese Version kontaktiert ChatGPT noch nicht automatisch. Dafür wäre eine API-/Server-Anbindung nötig. Eine reine lokale HTML-Datei darf keinen geheimen API-Schlüssel enthalten, weil dieser sonst für jeden sichtbar wäre.

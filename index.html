@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>AbnehmCoach Peter V1.1.2</title>
+<title>AbnehmCoach Peter V1.1.5</title>
 <style>
 :root{
   --bg:#f5f7fb; --card:#ffffff; --ink:#1f2d3d; --muted:#657386;
@@ -28,8 +28,7 @@ header{
 h1{margin:0;font-size:25px;letter-spacing:.2px}
 .subtitle{opacity:.92;font-size:14px;margin-top:4px}
 .status-pill{background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);border-radius:999px;padding:9px 13px;font-size:13px}
-.navchips{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
-.navchips a{color:white;text-decoration:none;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.26);border-radius:999px;padding:7px 10px;font-size:12px;font-weight:700}
+
 main{max-width:1180px;margin:18px auto;padding:0 14px 78px}
 .grid{display:grid;gap:16px}
 .grid.cards{grid-template-columns:repeat(5,minmax(0,1fr))}
@@ -94,7 +93,7 @@ input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 
 .badge.warn{background:var(--softorange);color:#a65b10}
 .badge.bad{background:var(--softred);color:var(--red)}
 .chart-wrap{width:100%;height:290px;position:relative}
-/* V1.1.2: Charts als HTML/SVG statt Canvas, damit Safari/Druck/Browser zuverlässiger anzeigen */
+/* V1.1.5: Charts als HTML/SVG statt Canvas, damit Safari/Druck/Browser zuverlässiger anzeigen */
 .html-chart{width:100%;min-height:290px;border-radius:14px;background:#fff;border:1px solid var(--line);padding:14px;overflow:hidden}
 .bar-chart{display:flex;gap:8px;align-items:flex-end;height:215px;border-left:1px solid var(--line);border-bottom:1px solid var(--line);padding:8px 8px 0 8px}
 .bar-col{flex:1;min-width:22px;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:5px}
@@ -153,24 +152,85 @@ hr{border:0;border-top:1px solid var(--line);margin:14px 0}
 .bottom-nav a{flex:1;text-align:center;text-decoration:none;color:var(--blue);font-size:11px;font-weight:800;padding:6px 3px;border-radius:10px}
 .bottom-nav a span{display:block;font-size:18px}
 @media(max-width:640px){.bottom-nav{display:flex}}
+
+.edit-mode-note{
+  display:none;
+  margin-top:10px;
+  padding:10px 12px;
+  border-radius:12px;
+  background:#fff7df;
+  border:1px solid #ffe0a0;
+  color:#7a4b10;
+  font-size:13px;
+}
+.target-info{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:10px;
+}
+@media(max-width:760px){.target-info{grid-template-columns:1fr}}
+.target-pill{
+  border:1px solid var(--line);
+  border-radius:14px;
+  background:#fff;
+  padding:10px 12px;
+  font-size:13px;
+  color:var(--muted);
+}
+.target-pill b{display:block;color:var(--blue);font-size:16px;margin-top:3px}
+
+.target-line{
+  position:absolute;top:-2px;bottom:-2px;width:2px;background:var(--blue);
+  box-shadow:0 0 0 1px rgba(255,255,255,.8);
+}
+.target-label{font-size:11px;color:var(--blue);margin-top:6px}
+.weight-line-box{margin-top:10px;border:1px solid var(--line);border-radius:14px;background:#fff;padding:12px}
+.weight-point-row{display:grid;grid-template-columns:80px 1fr 70px;gap:10px;align-items:center;font-size:12px;color:var(--muted);margin:7px 0}
+.weight-track{height:14px;border-radius:999px;background:#edf1f5;position:relative;border:1px solid #dce3ec}
+.weight-point{position:absolute;top:50%;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;background:var(--teal);border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.weight-target{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--red)}
+
+
+.bar-chart{position:relative}
+.target-line-horizontal{
+  position:absolute;
+  left:4px; right:4px;
+  height:2px;
+  background:var(--blue);
+  z-index:4;
+  opacity:.95;
+}
+.target-line-horizontal span{
+  position:absolute;
+  right:4px;
+  bottom:3px;
+  background:#fff;
+  color:var(--blue);
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:2px 6px;
+  font-size:10px;
+  font-weight:800;
+  white-space:nowrap;
+}
+.bar{position:relative;z-index:2}
+
 </style>
 </head>
 <body>
 <header>
   <div class="header-inner">
     <div>
-      <h1>🥗 AbnehmCoach Peter <span style="font-size:14px;opacity:.8">V1.1.2</span></h1>
+      <h1>🥗 AbnehmCoach Peter <span style="font-size:14px;opacity:.8">V1.1.5</span></h1>
       <div class="subtitle">Planstart: Freitag, 12.06.2026 · Schnellimport oben · Charts ohne Canvas korrigiert</div>
-      <div class="navchips">
-        <a href="#schnellimport">Schnellimport</a><a href="#eintrag">Details</a><a href="#charts">Diagramme</a><a href="#wochencheck">Wochencheck</a><a href="#wochenplan">Plan</a>
-      </div>
     </div>
     <div class="status-pill" id="todayText">Heute</div>
   </div>
 </header>
 
 <main>
-  <div class="section-title" id="schnellimport" style="margin-top:0">
+<div class="section-title" id="schnellimport" style="margin-top:0">
     <h2>⚡ Schnellimport deiner ChatGPT-Auswertung</h2>
     <span class="small">Hier direkt oben einfügen - kein langes Scrollen mehr.</span>
   </div>
@@ -227,8 +287,11 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
         <div class="footer-actions">
           <button type="button" onclick="parseAI()">1. Schätzung übernehmen</button>
           <button type="button" class="green" onclick="saveMeal()">2. Mahlzeit speichern</button>
-          <button type="button" class="secondary" onclick="copyPrompt()">Prompt für Foto kopieren</button>
+          <button type="button" class="secondary" onclick="copyPrompt()">ChatGPT-Anweisung kopieren</button>
+          <button type="button" class="secondary" id="cancelEditBtn" onclick="cancelEdit()" style="display:none">Bearbeitung abbrechen</button>
         </div>
+        <div id="editModeNote" class="edit-mode-note">Bearbeitungsmodus: Du änderst gerade eine gespeicherte Mahlzeit. Nach der Änderung bitte „Mahlzeit speichern“ klicken.</div>
+        <p class="small" style="margin:10px 0 0">„ChatGPT-Anweisung kopieren“ kopiert nur den Text, mit dem ChatGPT dein Essensfoto im richtigen App-Format auswerten soll.</p>
       </div>
     </div>
   </section>
@@ -263,24 +326,17 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
     </div>
   </section>
 
-  <section class="card" style="margin-top:16px">
-    <b style="color:var(--blue)">🔎 Datenspeicher-Prüfung</b>
-    <div class="small">Zeigt an, ob Mahlzeiten wirklich lokal gespeichert sind - unabhängig vom ausgewählten Datum.</div>
-    <div class="data-status">
-      <div class="mini">Mahlzeiten gesamt <b id="dbgMeals">0</b></div>
-      <div class="mini">Kalorien gesamt <b id="dbgKcal">0 kcal</b></div>
-      <div class="mini">Eiweiß gesamt <b id="dbgProtein">0 g</b></div>
-      <div class="mini">Tage mit Essen <b id="dbgDays">0</b></div>
-    </div>
-    <div class="footer-actions" style="margin-top:10px">
-      <button class="secondary" onclick="render()">Anzeige jetzt aktualisieren</button>
-      <button class="secondary" onclick="jumpToStoredDate()">Ersten gespeicherten Essenstag anzeigen</button>
-    </div>
+  
+<div class="section-title" id="eintrag">
+    <h2>📸 Mahlzeitendetails</h2>
+    <span class="small">Das Eingabefeld ist jetzt oben; hier siehst du nur nochmal die gespeicherten Mahlzeiten.</span>
+  </div>
+  <section class="card">
+    <div id="mealList" class="meal-list"></div>
   </section>
-
-  <div class="section-title" id="charts">
+<div class="section-title" id="charts">
     <h2>📊 Verlauf & Visualisierung</h2>
-    <span class="small">V1.1.2: Visualisierung ohne Canvas - gespeicherte Daten werden zuverlässig als Balken angezeigt.</span>
+    <span class="small">V1.1.5: Visualisierung ohne Canvas - gespeicherte Daten werden zuverlässig als Balken angezeigt.</span>
   </div>
   <section class="two-col">
     <div class="card">
@@ -293,14 +349,20 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
       <div class="html-chart" id="weightChart"></div>
       <div class="chart-note" id="weightChartNote">Für die Gewichtslinie brauchst du mindestens zwei Werte.</div>
     </div>
+    <div class="card">
+      <h3 style="margin-top:0;color:var(--blue)">Bewegung pro Tag</h3>
+      <div class="html-chart" id="moveChart"></div>
+      <div class="chart-note" id="moveChartNote">Zielbewegung wird als Linie angezeigt.</div>
+    </div>
   </section>
-
-  <div class="section-title" id="eintrag">
-    <h2>📸 Mahlzeitendetails</h2>
-    <span class="small">Das Eingabefeld ist jetzt oben; hier siehst du nur nochmal die gespeicherten Mahlzeiten.</span>
-  </div>
-  <section class="card">
-    <div id="mealList" class="meal-list"></div>
+<section class="card" style="margin-top:16px">
+    <h3 style="margin-top:0;color:var(--blue)">🎯 Zielmarken</h3>
+    <div class="target-info">
+      <div class="target-pill">Kalorienziel pro Tag <b id="targetKcalLabel">1.700 kcal</b></div>
+      <div class="target-pill">Bewegungsziel pro Tag <b id="targetMoveLabel">30 Min.</b></div>
+      <div class="target-pill">Zielgewicht <b id="targetWeightLabel">86,0 kg</b></div>
+    </div>
+    <p class="small">Die Zielwerte erscheinen in den Diagrammen als Markierung.</p>
   </section>
 
   <div class="section-title" id="wochencheck">
@@ -316,10 +378,37 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
     </div>
     <p class="tip" id="weekComment" style="margin-top:12px">Sobald Daten vorhanden sind, bekommst du hier eine kurze Einordnung.</p>
   </section>
-
-  <div class="section-title">
+<div class="section-title" id="wochenplan">
+    <h2>🗓 Wochenplan ab Freitag, 12.06.2026</h2>
+  </div>
+  <section class="card">
+    <table class="plan-table">
+      <thead><tr><th>Tag</th><th>Frühstück</th><th>Mittag</th><th>Abend</th><th>Bewegung</th></tr></thead>
+      <tbody>
+        <tr><td>Fr 12.06.</td><td>Shake / Skyr</td><td>Huhn + Gemüsepfanne</td><td>Fisch + Gemüse</td><td>Spaziergang 20-30 Min.</td></tr>
+        <tr><td>Sa 13.06.</td><td>Shake / Quark</td><td>Freier kontrollierter Teller</td><td>Leichtes Eiweiß-Abendessen</td><td>E-Bike locker 30-40 Min.</td></tr>
+        <tr><td>So 14.06.</td><td>Shake / Skyr</td><td>Familienessen kleiner</td><td>Eiweißbetont leicht</td><td>Spaziergang gemütlich</td></tr>
+        <tr><td>Mo 15.06.</td><td>Shake / Skyr</td><td>Fisch/Huhn + Gemüse</td><td>Eiweiß + Gemüse</td><td>Spaziergang + Kraft leicht</td></tr>
+        <tr><td>Di 16.06.</td><td>Shake / Quark</td><td>Großer Salat + Eiweiß</td><td>Omelett + Gemüse</td><td>E-Bike locker</td></tr>
+        <tr><td>Mi 17.06.</td><td>Shake / Skyr</td><td>Fisch + Kartoffeln + Gemüse</td><td>Skyr / Quark leicht</td><td>Spaziergang 30 Min.</td></tr>
+        <tr><td>Do 18.06.</td><td>Shake / Quark</td><td>Thunfisch / Ei + Gemüse</td><td>Hähnchensalat</td><td>Kraft leicht + Spaziergang</td></tr>
+      </tbody>
+    </table>
+  </section>
+<div class="section-title">
+    <h2>💾 Daten & Backup</h2>
+  </div>
+  <section class="card">
+    <div class="footer-actions">
+      <button class="secondary" onclick="exportData()">Backup exportieren</button>
+      <label class="button secondary" style="margin:0">Backup importieren<input type="file" id="importFile" accept="application/json" class="hidden" onchange="importData(event)"></label>
+      <button class="red" onclick="resetData()">Daten löschen</button>
+    </div>
+    <p class="small">Wichtig: Daten liegen lokal im Browser. Regelmäßig Backup exportieren.</p>
+  </section>
+<div class="section-title" id="koerperwerte">
     <h2>⚖️ Gewicht, Bauchumfang & Bewegung</h2>
-    <span class="small">Morgens oder wöchentlich eintragen und aktiv speichern</span>
+    <span class="small">Ganz bewusst am Ende: morgens oder wöchentlich eintragen und speichern</span>
   </div>
   <section class="card">
     <div class="form-grid">
@@ -356,38 +445,25 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
       <div class="redbox"><b>Rot</b>Luftnot, Druck, Schwindel oder Brustenge: sofort stoppen.</div>
     </div>
   </section>
-
-  <div class="section-title">
-    <h2>💾 Daten & Backup</h2>
+  <div class="section-title" id="speichercheck">
+    <h2>🧪 Datenspeicherprüfung</h2>
+    <span class="small">Ganz unten im Verwaltungsbereich: zeigt, ob lokale Daten wirklich gespeichert sind.</span>
   </div>
   <section class="card">
-    <div class="footer-actions">
-      <button class="secondary" onclick="exportData()">Backup exportieren</button>
-      <label class="button secondary" style="margin:0">Backup importieren<input type="file" id="importFile" accept="application/json" class="hidden" onchange="importData(event)"></label>
-      <button class="red" onclick="resetData()">Daten löschen</button>
+    <div class="week-summary">
+      <div class="mini">Mahlzeiten gesamt <b id="storageMeals">0</b></div>
+      <div class="mini">Kalorien gesamt <b id="storageKcal">0 kcal</b></div>
+      <div class="mini">Eiweiß gesamt <b id="storageProtein">0 g</b></div>
+      <div class="mini">Tage mit Essen <b id="storageDays">0</b></div>
     </div>
-    <p class="small">Wichtig: Daten liegen lokal im Browser. Regelmäßig Backup exportieren.</p>
+    <p class="small" id="storageHint" style="margin-top:10px">Wenn hier Werte stehen, sind die Daten lokal gespeichert.</p>
+    <div class="footer-actions" style="margin-top:10px">
+      <button class="secondary" onclick="render()">Anzeige jetzt aktualisieren</button>
+      <button class="secondary" onclick="jumpToStoredDate()">Ersten gespeicherten Essenstag anzeigen</button>
+    </div>
   </section>
 
-  <div class="section-title" id="wochenplan">
-    <h2>🗓 Wochenplan ab Freitag, 12.06.2026</h2>
-  </div>
-  <section class="card">
-    <table class="plan-table">
-      <thead><tr><th>Tag</th><th>Frühstück</th><th>Mittag</th><th>Abend</th><th>Bewegung</th></tr></thead>
-      <tbody>
-        <tr><td>Fr 12.06.</td><td>Shake / Skyr</td><td>Huhn + Gemüsepfanne</td><td>Fisch + Gemüse</td><td>Spaziergang 20-30 Min.</td></tr>
-        <tr><td>Sa 13.06.</td><td>Shake / Quark</td><td>Freier kontrollierter Teller</td><td>Leichtes Eiweiß-Abendessen</td><td>E-Bike locker 30-40 Min.</td></tr>
-        <tr><td>So 14.06.</td><td>Shake / Skyr</td><td>Familienessen kleiner</td><td>Eiweißbetont leicht</td><td>Spaziergang gemütlich</td></tr>
-        <tr><td>Mo 15.06.</td><td>Shake / Skyr</td><td>Fisch/Huhn + Gemüse</td><td>Eiweiß + Gemüse</td><td>Spaziergang + Kraft leicht</td></tr>
-        <tr><td>Di 16.06.</td><td>Shake / Quark</td><td>Großer Salat + Eiweiß</td><td>Omelett + Gemüse</td><td>E-Bike locker</td></tr>
-        <tr><td>Mi 17.06.</td><td>Shake / Skyr</td><td>Fisch + Kartoffeln + Gemüse</td><td>Skyr / Quark leicht</td><td>Spaziergang 30 Min.</td></tr>
-        <tr><td>Do 18.06.</td><td>Shake / Quark</td><td>Thunfisch / Ei + Gemüse</td><td>Hähnchensalat</td><td>Kraft leicht + Spaziergang</td></tr>
-      </tbody>
-    </table>
-  </section>
-
-  <div class="section-title">
+<div class="section-title">
     <h2>⚙️ Ziele einstellen</h2>
   </div>
   <section class="card">
@@ -395,6 +471,7 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
       <div><label>Kalorienziel/Tag</label><input type="number" id="goalKcal"></div>
       <div><label>Eiweißziel g/Tag</label><input type="number" id="goalProtein"></div>
       <div><label>Bewegungsziel Min./Tag</label><input type="number" id="goalMove"></div>
+      <div><label>Zielgewicht kg</label><input type="number" step="0.1" id="goalWeight"></div>
       <div style="align-self:end"><button onclick="saveGoals()">Ziele speichern</button></div>
     </div>
     <p class="small">Hinweis: Diese App ersetzt keine medizinische Beratung. Bei Luftnot, Schwindel, Brustenge oder deutlicher Verschlechterung Training abbrechen und ärztlich abklären.</p>
@@ -409,8 +486,8 @@ Tipp: Sehr guter Start. Eiweißreiches Frühstück, passt gut in den Tagesplan."
 </nav>
 
 <script>
-const KEY = "abnehmcoach_peter_v111";
-const OLD_KEYS = ["abnehmcoach_peter_v11","abnehmcoach_peter_v1"];
+const KEY = "abnehmcoach_peter_v115";
+const OLD_KEYS = ["abnehmcoach_peter_v114","abnehmcoach_peter_v113","abnehmcoach_peter_v112","abnehmcoach_peter_v111","abnehmcoach_peter_v11","abnehmcoach_peter_v1"];
 const PLAN_START = "2026-06-12";
 const PLAN_START_LABEL = "Freitag, 12.06.2026";
 const today = new Date();
@@ -418,11 +495,13 @@ const isoToday = today.toISOString().slice(0,10);
 const activeDate = isoToday < PLAN_START ? PLAN_START : isoToday;
 const pad = n => String(n).padStart(2,"0");
 let state = load();
+let editingMealId = null;
+let editingMealPhoto = '';
 
 function defaultState(){
   return {
-    version:"1.1.2",
-    goals:{kcal:1700, protein:110, move:30},
+    version:"1.1.3",
+    goals:{kcal:1700, protein:110, move:30, weight:86},
     meals:[],
     logs:[{date:PLAN_START, weight:96, belly:null, move:0, moveType:"Planstart"}]
   };
@@ -434,7 +513,7 @@ function migrateOldData(){
       if(raw){
         const old = JSON.parse(raw);
         if(old && (old.meals || old.logs)){
-          old.version = "1.1.2-migrated";
+          old.version = "1.1.3-migrated";
           localStorage.setItem(KEY, JSON.stringify(old));
           return old;
         }
@@ -468,6 +547,7 @@ function init(){
   document.getElementById("goalKcal").value = state.goals.kcal || 1700;
   document.getElementById("goalProtein").value = state.goals.protein || 110;
   document.getElementById("goalMove").value = state.goals.move || 30;
+  document.getElementById("goalWeight").value = state.goals.weight || 86;
   document.getElementById("todayText").textContent = new Intl.DateTimeFormat("de-DE",{weekday:"long", day:"2-digit", month:"2-digit", year:"numeric"}).format(today);
   render();
   window.addEventListener("resize", renderCharts);
@@ -496,21 +576,15 @@ function render(){
   renderWeightTrend();
   renderMeals(d);
   renderWeekSummary();
-  renderDebugStatus();
+  renderStorageCheck();
   renderCharts();
 }
 function renderCharts(){
   renderKcalChart();
   renderWeightChart();
+  renderMoveChart();
 }
-function renderDebugStatus(){
-  const meals = state.meals || [];
-  const days = [...new Set(meals.map(m=>m.date).filter(Boolean))];
-  document.getElementById("dbgMeals").textContent = meals.length;
-  document.getElementById("dbgKcal").textContent = Math.round(sum(meals,"kcal")) + " kcal";
-  document.getElementById("dbgProtein").textContent = Math.round(sum(meals,"protein")) + " g";
-  document.getElementById("dbgDays").textContent = days.length;
-}
+
 function jumpToStoredDate(){
   const first = (state.meals || []).map(m=>m.date).filter(Boolean).sort()[0];
   if(first){
@@ -566,7 +640,7 @@ function renderMeals(date){
         <div class="meal-meta">${ratingBadge(m.rating)} ${Math.round(Number(m.kcal)||0)} kcal · ${Math.round(Number(m.protein)||0)} g Eiweiß</div>
         <div class="meal-meta">${escapeHtml(m.note||"")}</div>
       </div>
-      <div class="meal-actions"><button class="secondary" onclick="deleteMeal('${m.id}')">löschen</button></div>
+      <div class="meal-actions"><button class="secondary" onclick="editMeal('${m.id}')">bearbeiten</button><button class="secondary" onclick="deleteMeal('${m.id}')">löschen</button></div>
     </div>`).join("");
 }
 function escapeHtml(s){return String(s).replace(/[&<>"']/g, m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
@@ -601,13 +675,13 @@ Tipp: ___
 Danach darfst du bei Bedarf noch 1-2 kurze Hinweise ergänzen.
 
 Berücksichtige: Start Freitag, 12.06.2026, über 60, 1,70 m, 96 kg Startgewicht, Prednisolon-Ausschleichen, Pentasa/Mesalazin, halbseitige Zwerchfelllähmung, Ziel 1.600-1.800 kcal und 100-115 g Eiweiß pro Tag.`;
-  navigator.clipboard.writeText(prompt).then(()=>alert("Prompt kopiert. Jetzt bei ChatGPT mit deinem Foto einfügen."));
+  navigator.clipboard.writeText(prompt).then(()=>alert("ChatGPT-Anweisung kopiert. Diese kannst du zusammen mit einem Essensfoto in ChatGPT einfügen."));
 }
 function saveMeal(){
   const file = document.getElementById("mealPhoto").files[0];
-  const save = (photoData)=> {
-    state.meals.push({
-      id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random()),
+  const doSave = (photoData)=> {
+    const mealData = {
+      id: editingMealId || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now()+Math.random())),
       date: document.getElementById("mealDate").value || activeDate,
       time: document.getElementById("mealTime").value,
       type: document.getElementById("mealType").value,
@@ -615,23 +689,72 @@ function saveMeal(){
       protein: Number(document.getElementById("mealProtein").value)||0,
       rating: document.getElementById("mealRating").value,
       note: document.getElementById("mealNote").value,
-      photo: photoData
-    });
+      photo: photoData || editingMealPhoto || ""
+    };
+
+    if(editingMealId){
+      const idx = state.meals.findIndex(m=>m.id===editingMealId);
+      if(idx >= 0) state.meals[idx] = mealData;
+      else state.meals.push(mealData);
+    } else {
+      state.meals.push(mealData);
+    }
+
     persist();
-    document.getElementById("mealKcal").value="";
-    document.getElementById("mealProtein").value="";
-    document.getElementById("mealNote").value="";
-    document.getElementById("aiImport").value="";
-    document.getElementById("importStatus").style.display="none";
-    document.getElementById("mealPhoto").value="";
+    clearMealForm();
     render();
-    setTimeout(()=>document.getElementById("charts").scrollIntoView({behavior:"smooth",block:"start"}), 150);
   };
   if(file){
     const reader = new FileReader();
-    reader.onload = () => resizeImage(reader.result, save);
+    reader.onload = () => resizeImage(reader.result, doSave);
     reader.readAsDataURL(file);
-  } else save("");
+  } else doSave("");
+}
+function clearMealForm(){
+  editingMealId = null;
+  editingMealPhoto = "";
+  document.getElementById("mealKcal").value="";
+  document.getElementById("mealProtein").value="";
+  document.getElementById("mealNote").value="";
+  document.getElementById("aiImport").value="";
+  document.getElementById("importStatus").style.display="none";
+  document.getElementById("mealPhoto").value="";
+  const note = document.getElementById("editModeNote");
+  const cancel = document.getElementById("cancelEditBtn");
+  if(note) note.style.display = "none";
+  if(cancel) cancel.style.display = "none";
+}
+function editMeal(id){
+  const meal = state.meals.find(m=>m.id===id);
+  if(!meal) return;
+  editingMealId = id;
+  editingMealPhoto = meal.photo || "";
+  document.getElementById("mealDate").value = meal.date || activeDate;
+  document.getElementById("mealTime").value = meal.time || "";
+  document.getElementById("mealType").value = meal.type || "Frühstück";
+  document.getElementById("mealKcal").value = Math.round(Number(meal.kcal)||0);
+  document.getElementById("mealProtein").value = Math.round(Number(meal.protein)||0);
+  document.getElementById("mealRating").value = meal.rating || "ok";
+  document.getElementById("mealNote").value = meal.note || "";
+  document.getElementById("aiImport").value =
+    `Kalorien: ca. ${Math.round(Number(meal.kcal)||0)} kcal\n` +
+    `Eiweiß: ca. ${Math.round(Number(meal.protein)||0)} g\n` +
+    `Bewertung: ${ratingText(meal.rating || "ok")}\n` +
+    `Tipp: ${meal.note || ""}`;
+  const note = document.getElementById("editModeNote");
+  const cancel = document.getElementById("cancelEditBtn");
+  if(note) note.style.display = "block";
+  if(cancel) cancel.style.display = "inline-block";
+  document.getElementById("schnellimport").scrollIntoView({behavior:"smooth",block:"start"});
+}
+function cancelEdit(){
+  clearMealForm();
+}
+function ratingText(r){
+  if(r==="good") return "passt gut";
+  if(r==="warn") return "vorsichtig";
+  if(r==="bad") return "ungünstig";
+  return "geht so";
 }
 function resizeImage(dataUrl, cb){
   const img = new Image();
@@ -665,7 +788,8 @@ function saveGoals(){
   state.goals = {
     kcal: Number(document.getElementById("goalKcal").value)||1700,
     protein: Number(document.getElementById("goalProtein").value)||110,
-    move: Number(document.getElementById("goalMove").value)||30
+    move: Number(document.getElementById("goalMove").value)||30,
+    weight: Number(document.getElementById("goalWeight").value)||86
   };
   persist(); render();
 }
@@ -673,7 +797,7 @@ function exportData(){
   const blob = new Blob([JSON.stringify(state,null,2)],{type:"application/json"});
   const a = document.createElement("a");
   a.href = URL.createObjectURL(blob);
-  a.download = "abnehmcoach_v111_backup_" + activeDate + ".json";
+  a.download = "abnehmcoach_v115_backup_" + activeDate + ".json";
   a.click();
 }
 function importData(evt){
@@ -711,38 +835,42 @@ function renderKcalChart(){
   const dates = chartDates();
   const data = dates.map(d=>({date:d, kcal:sum(getMealsFor(d),"kcal"), protein:sum(getMealsFor(d),"protein")}));
   const total = data.reduce((a,b)=>a+b.kcal,0);
+  const goal = state.goals.kcal || 1700;
   if(total <= 0){
     el.innerHTML = `<div class="chart-empty">Noch keine Kalorien eingetragen.<br>Wenn unten eine Mahlzeit sichtbar ist, klicke bitte „Anzeige jetzt aktualisieren“.</div>`;
     note.textContent = "Noch keine Kalorien eingetragen.";
     return;
   }
-  const max = Math.max(state.goals.kcal || 1700, ...data.map(d=>d.kcal), 1000);
-  el.innerHTML = `<div class="bar-chart">` + data.map(d=>{
+  const max = Math.max(goal, ...data.map(d=>d.kcal), 1000);
+  const goalPct = Math.max(0, Math.min(100, Math.round((goal/max)*100)));
+  el.innerHTML = `<div class="bar-chart">
+    <div class="target-line-horizontal" style="bottom:${goalPct}%"><span>Ziel ${Math.round(goal)} kcal</span></div>` + data.map(d=>{
     const pct = d.kcal > 0 ? Math.max(4, Math.round((d.kcal/max)*100)) : 0;
-    const over = d.kcal > (state.goals.kcal || 1700) ? " over" : "";
+    const over = d.kcal > goal ? " over" : "";
     const label = d.date.slice(8,10)+"."+d.date.slice(5,7)+".";
     const value = d.kcal ? Math.round(d.kcal)+"" : "";
     return `<div class="bar-col" title="${label}: ${Math.round(d.kcal)} kcal / ${Math.round(d.protein)} g Eiweiß"><div class="bar-value">${value}</div><div class="bar${over}" style="height:${pct}%"></div><div class="bar-label">${label}</div></div>`;
   }).join("") + `</div>`;
   const selectedKcal = Math.round(sum(getMealsFor(selectedDate()),"kcal"));
-  note.textContent = `Ausgewählter Tag: ${selectedKcal} kcal. Gespeicherte Kalorien gesamt: ${Math.round(total)} kcal.`;
+  note.textContent = `Ausgewählter Tag: ${selectedKcal} kcal. Ziel: ${Math.round(goal)} kcal. Gespeicherte Kalorien gesamt: ${Math.round(total)} kcal.`;
 }
 function renderWeightChart(){
   const el = document.getElementById("weightChart");
   const note = document.getElementById("weightChartNote");
   const logs = (state.logs || []).filter(l=>Number(l.weight)).sort((a,b)=>a.date.localeCompare(b.date)).slice(-14);
+  const goalWeight = Number(state.goals.weight || 86);
   if(logs.length < 2){
     if(logs.length === 1){
-      el.innerHTML = `<div class="chart-empty">Ein Gewichtswert gespeichert:<br><b style="font-size:24px;color:var(--blue)">${Number(logs[0].weight).toFixed(1)} kg</b><br>Für eine Linie bitte einen zweiten Wert speichern.</div>`;
+      el.innerHTML = `<div class="chart-empty">Ein Gewichtswert gespeichert:<br><b style="font-size:24px;color:var(--blue)">${Number(logs[0].weight).toFixed(1)} kg</b><br>Zielgewicht: <b>${goalWeight.toFixed(1)} kg</b><br>Für eine Linie bitte einen zweiten Wert speichern.</div>`;
       note.textContent = "Ein Gewichtswert ist gespeichert. Für die Gewichtslinie brauchst du einen zweiten Wert.";
     } else {
-      el.innerHTML = `<div class="chart-empty">Noch kein Gewicht gespeichert.<br>Bitte unten Gewicht eintragen und „Tageswert speichern“ klicken.</div>`;
+      el.innerHTML = `<div class="chart-empty">Noch kein Gewicht gespeichert.<br>Zielgewicht: <b>${goalWeight.toFixed(1)} kg</b><br>Bitte unten Gewicht eintragen und „Tageswert speichern“ klicken.</div>`;
       note.textContent = "Für die Gewichtslinie brauchst du mindestens zwei Werte.";
     }
     return;
   }
   const w = 640, h = 230, pad = 28;
-  const vals = logs.map(l=>Number(l.weight));
+  const vals = logs.map(l=>Number(l.weight)).concat([goalWeight]);
   const min = Math.min(...vals)-0.5, max = Math.max(...vals)+0.5;
   const xStep = (w-2*pad)/(logs.length-1 || 1);
   const pts = logs.map((l,i)=>{
@@ -750,17 +878,49 @@ function renderWeightChart(){
     const y = h-pad-(h-2*pad)*((Number(l.weight)-min)/(max-min || 1));
     return {x,y,l};
   });
+  const targetY = h-pad-(h-2*pad)*((goalWeight-min)/(max-min || 1));
   const poly = pts.map(p=>`${p.x.toFixed(1)},${p.y.toFixed(1)}`).join(" ");
   el.innerHTML = `<svg class="weight-svg" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
     <line x1="${pad}" y1="${h-pad}" x2="${w-pad}" y2="${h-pad}" stroke="#dce3ec"/>
     <line x1="${pad}" y1="${pad}" x2="${pad}" y2="${h-pad}" stroke="#dce3ec"/>
+    <line x1="${pad}" y1="${targetY.toFixed(1)}" x2="${w-pad}" y2="${targetY.toFixed(1)}" stroke="#c0392b" stroke-width="2" stroke-dasharray="6 5"/>
+    <text x="${w-pad-120}" y="${Math.max(14,targetY-6).toFixed(1)}" font-size="13" fill="#c0392b" font-weight="700">Ziel ${goalWeight.toFixed(1)} kg</text>
     <polyline points="${poly}" fill="none" stroke="#2b8f81" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
     ${pts.map((p,i)=>`<circle cx="${p.x}" cy="${p.y}" r="5" fill="#1f3a5f"/>`).join("")}
     ${pts.map((p,i)=> i===0 || i===pts.length-1 ? `<text x="${Math.max(8,Math.min(w-90,p.x-18))}" y="${Math.max(16,p.y-10)}" font-size="14" fill="#1f3a5f" font-weight="700">${Number(p.l.weight).toFixed(1)} kg</text>` : "").join("")}
   </svg>`;
   const diff = Number(logs[logs.length-1].weight)-Number(logs[0].weight);
-  note.textContent = `Gewichtsverlauf: ${logs[0].weight} kg bis ${logs[logs.length-1].weight} kg (${diff>0?"+":""}${diff.toFixed(1)} kg).`;
+  note.textContent = `Gewichtsverlauf: ${logs[0].weight} kg bis ${logs[logs.length-1].weight} kg (${diff>0?"+":""}${diff.toFixed(1)} kg). Zielgewicht: ${goalWeight.toFixed(1)} kg.`;
 }
+function renderMoveChart(){
+  const el = document.getElementById("moveChart");
+  const note = document.getElementById("moveChartNote");
+  if(!el) return;
+  const dates = chartDates();
+  const goal = state.goals.move || 30;
+  const data = dates.map(d=>{
+    const log = (state.logs || []).find(l=>l.date===d);
+    return {date:d, move: log ? (Number(log.move)||0) : 0};
+  });
+  const total = data.reduce((a,b)=>a+b.move,0);
+  if(total <= 0){
+    el.innerHTML = `<div class="chart-empty">Noch keine Bewegung eingetragen.<br>Unten bei Gewicht/Bauchumfang & Bewegung speichern.</div>`;
+    note.textContent = `Zielbewegung: ${Math.round(goal)} Minuten pro Tag.`;
+    return;
+  }
+  const max = Math.max(goal, ...data.map(d=>d.move), 30);
+  const goalPct = Math.max(0, Math.min(100, Math.round((goal/max)*100)));
+  el.innerHTML = `<div class="bar-chart">
+    <div class="target-line-horizontal" style="bottom:${goalPct}%"><span>Ziel ${Math.round(goal)} Min.</span></div>` + data.map(d=>{
+    const pct = d.move > 0 ? Math.max(4, Math.round((d.move/max)*100)) : 0;
+    const over = d.move >= goal ? "" : "";
+    const label = d.date.slice(8,10)+"."+d.date.slice(5,7)+".";
+    const value = d.move ? Math.round(d.move)+"" : "";
+    return `<div class="bar-col" title="${label}: ${Math.round(d.move)} Minuten"><div class="bar-value">${value}</div><div class="bar${over}" style="height:${pct}%"></div><div class="bar-label">${label}</div></div>`;
+  }).join("") + `</div>`;
+  note.textContent = `Bewegung gesamt im sichtbaren Zeitraum: ${Math.round(total)} Minuten. Ziel: ${Math.round(goal)} Minuten pro Tag.`;
+}
+
 function renderWeekSummary(){
   const dates=lastNDates(7);
   const kVals=dates.map(d=>sum(getMealsFor(d),"kcal")).filter(v=>v>0);
@@ -785,6 +945,39 @@ function renderWeekSummary(){
   }
   document.getElementById("weekComment").textContent=comment;
 }
+
+
+function renderTargetLabels(){
+  const setText = (id, value) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
+  };
+  setText("targetKcalLabel", Math.round(state.goals.kcal || 1700) + " kcal");
+  setText("targetMoveLabel", Math.round(state.goals.move || 30) + " Min.");
+  setText("targetWeightLabel", (Number(state.goals.weight || 86)).toFixed(1).replace(".", ",") + " kg");
+}
+
+function renderStorageCheck(){
+  const meals = Array.isArray(state.meals) ? state.meals : [];
+  const mealDays = Array.from(new Set(meals.map(m=>m.date).filter(Boolean)));
+  const kcal = meals.reduce((a,m)=>a+(Number(m.kcal)||0),0);
+  const protein = meals.reduce((a,m)=>a+(Number(m.protein)||0),0);
+  const setText = (id, value) => {
+    const el = document.getElementById(id);
+    if(el) el.textContent = value;
+  };
+  setText("storageMeals", meals.length);
+  setText("storageKcal", Math.round(kcal) + " kcal");
+  setText("storageProtein", Math.round(protein) + " g");
+  setText("storageDays", mealDays.length);
+  const hint = document.getElementById("storageHint");
+  if(hint){
+    hint.textContent = meals.length
+      ? "Speicherung aktiv: Mahlzeiten sind lokal im Browser vorhanden. Bitte regelmäßig Backup exportieren."
+      : "Noch keine Mahlzeit im lokalen Speicher gefunden. Nach dem Schnellimport bitte immer 'Mahlzeit speichern' klicken.";
+  }
+}
+
 document.getElementById("mealDate").addEventListener("change", render);
 init();
 </script>
